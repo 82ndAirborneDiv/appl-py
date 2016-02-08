@@ -1,3 +1,8 @@
+### OSX ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -19,6 +24,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+
 
 # Installer logs
 pip-log.txt
@@ -45,6 +51,9 @@ coverage.xml
 # Django stuff:
 *.log
 *.pot
+*.pyc
+.idea
+_build
 
 # Sphinx documentation
 docs/_build/
