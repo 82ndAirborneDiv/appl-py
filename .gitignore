@@ -57,3 +57,7 @@ _build
 
 # Sphinx documentation
 docs/_build/
+
+# pyenv
+.python-version
+
