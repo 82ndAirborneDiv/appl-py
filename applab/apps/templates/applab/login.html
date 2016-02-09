@@ -1,0 +1,39 @@
+{% extends 'applab/base.html' %}
+
+{% block content %}
+    <div class="content-section-a">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    
+                    <div class="panel panel-default"  style="max-width:900px;margin-left:auto; margin-right:auto;">
+                          <div class="panel-body">
+                          		<p class="lead" style="color:#075290;"><strong>To access IIU mobile prototypes/apps (AppLab), you must agree with the following statements:</strong></p>
+								<ul>
+                                	<li class="lead">I acknowledge that I am a member of the CDC developer and/or testing community.</li>
+									<li class="lead">I understand that AppLab is meant for CDC staff, authorized agents of CDC (e.g., contractors), or CDC community partners only.</li>
+									<li class="lead">I understand that AppLab does NOT contain production apps, but only prototype and/or proof-of-concept apps for collaboration and/or testing purposes.</li>
+								</ul>
+								<p class="lead">If you agree with these statements, you may proceed by entering your password:</p>
+                                <form class="form-inline">
+                                	<div class="form-group">
+                                    	<label class="sr-only" for="exampleInputPassword3">Password</label>
+                                    	<input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password">
+                                    </div>
+  									<button type="submit" class="btn btn-primary">Log in</button>
+								</form><br>
+                                <p class="request-code">To request a passcode, please e-mail: <a href="mailto:informaticslab@cdc.gov">informaticslab@cdc.gov</a>.
+                          </div>
+					</div>
+                    
+                </div>
+                
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    
+{% endblock %}
