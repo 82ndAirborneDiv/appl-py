@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class ProjectTitle(models.Model):
+class Project(models.Model):
     """ The ProjectTitle is the top level object for all apps and is a foreign key for all ProjectOverview objects. """
     title = models.CharField(max_length=200)
     project_code_name = models.SlugField(max_length=30)    # the code name used to refer to the project, e.g. lydia
@@ -22,7 +22,7 @@ class ProjectOverview(models.Model):
     as it is a foreign key to the ProjectScreenshot object. The attributes of this object may evolve over time and are
     separated from the Project object
     """
-    project_title = models.ForeignKey(ProjectTitle, on_delete=models.CASCADE)
+    project_title = models.ForeignKey(Project, on_delete=models.CASCADE)
     description = models.TextField()
     icon = models.ImageField()
     screenshots = models.ManyToManyField(ProjectScreenshot)

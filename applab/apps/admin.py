@@ -1,9 +1,9 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import ProjectTitle, ProjectOverview, ProjectScreenshot, IosProject, IosRelease
+from .models import Project, ProjectOverview, ProjectScreenshot, IosProject, IosRelease
 
-admin.site.register(ProjectTitle)
+admin.site.register(Project)
 admin.site.register(ProjectOverview)
 admin.site.register(ProjectScreenshot)
 admin.site.register(IosProject)
