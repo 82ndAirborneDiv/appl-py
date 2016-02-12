@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import Http404
-from apps.models import App
+from .models import Project
 
 def hello_world(request):
     return render(request, 'applab/hello_world.html')
@@ -11,7 +11,13 @@ def login(request):
 
 
 def home(request):
-    return render(request, 'applab/home.html')
+    try:
+        newReleases = Project.objects.filter(is_archived = 0)
+    except Project.DoesNotExist:
+        newReleases = []
+    return render(request, 'applab/home.html', {
+        'newReleases' : newReleases,
+    })
 
 
 def ios(request):
@@ -21,10 +27,10 @@ def ios(request):
 def android(request):
     return render(request, 'applab/android.html')
 
-def app_detail(request,app_id):
+def app_detail(request):
     try:
-        app =  App.objects.get(app_id = app_id)
-    except App.DoesNotExist:
+        app =  Project.objects.get(is_archived=False)
+    except Project.DoesNotExist:
         raise Http404('This app does not exist')
     return render(request,'applab/app_detail.html',{
         'app' : app,
