@@ -15,7 +15,7 @@ class ProjectOverviewScreenshotInline(admin.TabularInline):
 
 class ProjectOverviewAdmin(admin.ModelAdmin):
     readonly_fields = ('date_published',)
-    fields = ('project', 'date_published', 'description',)
+    fields = ('project', 'date_published', 'description','icon')
     list_filter = ['date_published', 'description']
     inlines = [ProjectOverviewScreenshotInline]
 
