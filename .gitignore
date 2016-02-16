@@ -55,7 +55,7 @@ coverage.xml
 *.sqlite3
 .idea
 _build
-settings_local.py
+*settings_local.py
 
 # Sphinx documentation
 docs/_build/
