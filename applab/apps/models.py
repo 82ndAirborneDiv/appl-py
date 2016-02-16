@@ -24,6 +24,10 @@ class ProjectOverview(models.Model):
     date_published = models.DateTimeField(auto_now=True)
     source_code_link = models.URLField()
 
+    def icon_image(self):
+        return mark_safe('<img src="%s" style="max-height: 100px; max-width: 100px;" />' % self.icon.url)
+    icon_image.allow_tags = True
+
     def __str__(self):
         return str(localtime(self.date_published).strftime('%Y-%m-%d %I:%M %p'))
 
@@ -34,9 +38,9 @@ class ProjectOverviewScreenshot(models.Model):
     project_overview = models.ForeignKey(ProjectOverview, related_name='screenshots')
     screenshot = models.ImageField()
 
-    def admin_image(self):
+    def screenshot_image(self):
         return mark_safe('<img src="%s" style="max-height: 100px; max-width: 100px;" />' % self.screenshot.url)
-    admin_image.allow_tags = True
+    screenshot_image.allow_tags = True
 
     def __str__(self):
         return self.screenshot.path
