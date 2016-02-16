@@ -1,31 +1,12 @@
 from django.shortcuts import render
-from django.http import Http404
-from apps.models import App
+from django.contrib.auth.decorators import login_required
+from .models import Project, ProjectOverview
 
-def hello_world(request):
-    return render(request, 'applab/hello_world.html')
+@login_required()
+def home_page(request):
+    apps_to_display = ProjectOverview.objects.filter(project__in=Project.objects.filter(is_archived=False).order_by('title'))
 
+    return render(request, 'applab/home.html', {'apps': apps_to_display})
 
 def login(request):
-    return render(request, 'applab/login.html')
-
-
-def home(request):
-    return render(request, 'applab/home.html')
-
-
-def ios(request):
-    return render(request, 'applab/ios.html')
-
-
-def android(request):
-    return render(request, 'applab/android.html')
-
-def app_detail(request,app_id):
-    try:
-        app =  App.objects.get(app_id = app_id)
-    except App.DoesNotExist:
-        raise Http404('This app does not exist')
-    return render(request,'applab/app_detail.html',{
-        'app' : app,
-    })
+    return render(request, 'applab/templates/registration/login.html')

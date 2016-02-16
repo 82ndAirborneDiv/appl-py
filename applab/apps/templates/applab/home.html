@@ -1,10 +1,7 @@
-{% extends 'applab/applab_base.html' %}
+{% extends 'applab/base.html' %}
 {% load staticfiles %}
 
 {% block content %}
-    {% for i in 'xxxxx' %}
-        <br>
-    {% endfor %}
       <div class="home-content">
 
         <div class="container">
@@ -31,42 +28,22 @@
             <div class="row">
                 <div class="col-lg-12 new-release-content">
                     <div class="row">
+                        {% for app in apps %}
+                            {% if app.icon and app.project.title and app.description %}
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                             <div class="panel panel-default">
+
                               <div class="panel-body">
-                                <a href="#"><img src="{% static 'img/iiu-app-icon.png' %}" class="img-responsive"></a>
-                                <br><span class="app-title"><a href="#">IIU Mobile App</a></span>
-                                <br>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                <a href="#"><img src="{{ app.icon.url }}" width="512" height="512" class="img-responsive"></a>
+                                <br><span class="app-title"><a href="#">{{ app.project.title }}</a></span>
+                                <div>{{ app.description }}</div>
                               </div>
+
+
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                            <div class="panel panel-default">
-                              <div class="panel-body">
-                                <a href="#"><img src="{% static 'img/iiu-app-icon.png' %}" class="img-responsive"></a>
-                                <br><span class="app-title"><a href="#">IIU Mobile App</a></span>
-                                <br>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                              </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                            <div class="panel panel-default">
-                              <div class="panel-body">
-                                <a href="#"><img src="{% static 'img/placeholder-icon.png' %}" class="img-responsive"></a>
-                                <br><span class="app-title"><a href="#">Lifeguard</a></span>
-                                <br>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                              </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                            <div class="panel panel-default">
-                              <div class="panel-body">
-                                <a href="#"><img src="{% static 'img/placeholder-icon.png' %}" class="img-responsive"></a>
-                                <br><span class="app-title"><a href="#">Lifeguard</a></span>
-                                <br>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                              </div>
-                            </div>
-                        </div>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>
