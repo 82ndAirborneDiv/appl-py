@@ -16,7 +16,7 @@ def login(request):
 
 def home(request):
     try:
-        newReleases = Project.objects.filter(is_archived = 0)
+        newReleases= ProjectOverview.objects.filter(project__in=Project.objects.filter(is_archived=False).order_by('title'))
     except Project.DoesNotExist:
         newReleases = []
     return render(request, 'applab/home.html', {
