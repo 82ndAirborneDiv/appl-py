@@ -34,17 +34,22 @@
                             <div class="panel panel-default">
 
                               <div class="panel-body">
-                                <a href="#"><img src="{{ app.icon.url }}" width="512" height="512" class="img-responsive"></a>
-                                <br><span class="app-title"><a href="#">{{ app.project.title }}</a></span>
+                                <a href="{% url 'app_release_project' app.project.project_code_name %}"><img src="{{ app.icon.url }}" width="512" height="512" class="img-responsive"></a>
+                                <br><span class="app-title"><a href="{% url 'app_release_project' app.project.project_code_name %}">{{ app.project.title }}</a></span>
                                 <div>{{ app.description }}</div>
                                 <br>
                                   <div>
-                                    iOS Release: <a href="{{ app.ios.ios_project.apple_app_store_link }}">{{ app.ios.major_version }}.{{ app.ios.minor_version }}.{{ app.ios.point_version }}.{{ app.ios.build_version }}</a>
+                                    iOS Release: <a href="{% url "/applab/app_release/">{{ app.ios.major_version }}.{{ app.ios.minor_version }}.{{ app.ios.point_version }}.{{ app.ios.build_version }}</a>
                                 </div>
                                 <div>
                                   Android Release:<a href="{{ app.android.android_project.google_play_link }}">{{ app.android.major_version }}.{{ app.android.minor_version }}.{{ app.android.point_version }}.{{ app.android.build_version }}</a>
                                 </div>
                               </div>
+                                <div>
+                                    {% for screen in app.screenshots.all %}
+                                        <img src="{{ screen.screenshot.url }}" width="512" height="512" class="img-responsive">
+                                    {% endfor %}
+                                </div>
 
 
                             </div>
