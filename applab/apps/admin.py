@@ -10,12 +10,12 @@ admin.site.register(Project)
 class ProjectOverviewScreenshotInline(admin.TabularInline):
     model = ProjectOverviewScreenshot
     readonly_fields = ('screenshot_image',)
-    fields = ('screenshot_image',)
+    fields = ('screenshot_image', 'screenshot')
 
 
 class ProjectOverviewAdmin(admin.ModelAdmin):
     readonly_fields = ('date_published', 'icon_image')
-    fields = ('project', 'date_published', 'description', 'icon_image')
+    fields = ('project', 'date_published', 'description', 'icon_image', 'icon')
     list_filter = ['date_published', 'description']
     inlines = [ProjectOverviewScreenshotInline]
 

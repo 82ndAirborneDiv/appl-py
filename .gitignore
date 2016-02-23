@@ -63,4 +63,4 @@ docs/_build/
 # pyenv
 .python-version
 
-applab/db.sqlite3
+applab/media/
