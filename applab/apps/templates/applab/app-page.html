@@ -8,10 +8,10 @@
                 <div class="col-lg-12 app-download-section">
                     <div class="row">
                         <div class="col-lg-2 col-md-2 col-sm-3 col-xs-5">
-                            <img src="{% static 'img/placeholder-icon.png' %}" class="img-responsive">
+                            <img src="{{ appDetail.icon.url }}" width="512" height="512" class="img-responsive">
                         </div>
                         <div class="col-lg-10 col-md-10 col-sm-9 col-xs-7">
-                            <h1>Lifeguard (iOS)</h1>
+                            <h1>{{appDetail.title}} ({{appDetail.platform}})</h1>
                             <p class="version-text">Version 0.25
                                 <br><i>Updated: 01/05/2016</i></p>
                             <button type="button" class="btn btn-success dl-btn">Download</button>
@@ -34,17 +34,19 @@
 
                         <!-- Carousel items -->
                         <div class="carousel-inner">
-                            <div class="item active">
+                            {% for group in appDetail.screenshotGroups %}
+                            <div class="item {% if forloop.counter0 = 0 %}  active {% endif %}">
                                 <div class="row">
-                                    {% for screen in projectDetail.screenshots.all %}
-                                        <img src="{{ screen.screenshot.url }}" width="512" height="512" class="img-responsive">
+                                   {% for screen in group %}
+                                       <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                         <a href="#myModal" data-toggle="modal" data-target="#myModal"><img src="{{ screen.screenshot.url }}" alt="Image" class="img-responsive"></a>
+                                       </div>
                                     {% endfor %}
                                 </div>
                                 <!--/row-->
                             </div>
                             <!--/item-->
-
-
+                          {% endfor %}
                         </div>
                         <!--/carousel-inner--> <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
 
