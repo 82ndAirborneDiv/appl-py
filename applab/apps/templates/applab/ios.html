@@ -40,7 +40,7 @@
                             <div class="panel panel-default">
                               <div class="panel-body">
                                 <a href="/applab/app/ios-{{ app.ios_project.project_overview.project.title.split|join:'-' }}-{{ app.major_version }}-{{ app.minor_version }}-{{ app.point_version }}-{{ app.build_version }}"><img src="{{ app.ios_project.project_overview.icon.url }}" width="512" height="512" class="img-responsive"></a>
-                                <br><span class="app-title"><a href="/applab/app/ios-{{ app.ios_project.project_overview.project.title.split|join:'-' }}-{{ app.major_version }}-{{ app.minor_version }}-{{ app.point_version }}-{{ app.build_version }}">{{app.ios_project.project_overview.project.title }} For iOS {{ app.major_version }}.{{ app.minor_version }}.{{ app.point_version }}.{{ app.build_version }}</a></span>
+                                <br><span class="app-title"><a href="/applab/app/ios-{{ app.ios_project.project_overview.project.title.split|join:'-' }}-{{ app.major_version }}-{{ app.minor_version }}-{{ app.point_version }}-{{ app.build_version }}">{{app.ios_project.project_overview.project.title }} {{ app.major_version }}.{{ app.minor_version }}.{{ app.point_version }}.{{ app.build_version }}</a></span>
                                 <div class="desc-box">{{ app.ios_project.project_overview.description }}</div>
                               </div>
                             </div>
