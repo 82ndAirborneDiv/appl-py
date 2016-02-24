@@ -4,7 +4,7 @@
 {% block content %}
     <div class="row new-release-title">
                 <div class="col-lg-7 col-md-4 col-sm-4 col-xs-1">
-                    <h4>Anroid Applications</h4>
+                    <h4>Android Applications</h4>
                 </div>
                 <div class="col-lg-5 col-md-8 col-sm-8 col-xs-11" style="padding-top:5px;">
                     <form class="form-inline pull-right" role="form">
@@ -41,7 +41,7 @@
                               <div class="panel-body">
                                 <a href="/applab/app/android-{{ app.android_project.project_overview.project.title.split|join:'-' }}-{{ app.major_version }}-{{ app.minor_version }}-{{ app.point_version }}-{{ app.build_version }}"><img src="{{ app.android_project.project_overview.icon.url }}" width="512" height="512" class="img-responsive"></a>
                                 <br><span class="app-title"><a href="/applab/app/android-{{ app.android_project.project_overview.project.title.split|join:'-' }}-{{ app.major_version }}-{{ app.minor_version }}-{{ app.point_version }}-{{ app.build_version }}">{{app.android_project.project_overview.project.title }} For Android {{ app.major_version }}.{{ app.minor_version }}.{{ app.point_version }}.{{ app.build_version }}</a></span>
-                                <div>{{ app.android_project.project_overview.description }}</div>
+                                <div class="desc-box">{{ app.android_project.project_overview.description }}</div>
                               </div>
                             </div>
                         </div>
