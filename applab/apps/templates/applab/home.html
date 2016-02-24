@@ -28,23 +28,23 @@
                     <div class="row">
                         {% for app in apps %}
                             {% if app.icon and app.project.title and app.description %}
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                            <div class="panel panel-default">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                <div class="panel panel-default">
 
-                              <div class="panel-body">
-                                <a href="{% url 'app_release_project' app.project.project_code_name %}"><img src="{{ app.icon.url }}" width="512" height="512" class="img-responsive"></a>
-                                <br><span class="app-title"><a href="{% url 'app_release_project' app.project.project_code_name %}">{{ app.project.title }}</a></span>
-                                <div>{{ app.description }}</div>
-                                <br>
-                                  <div>
-                                    iOS Release: <a href="{% url "/applab/app/">{{ app.ios.major_version }}.{{ app.ios.minor_version }}.{{ app.ios.point_version }}.{{ app.ios.build_version }}</a>
+                                  <div class="panel-body">
+                                    <a href="{% url 'app_release_project' app.project.project_code_name %}"><img src="{{ app.icon.url }}" width="512" height="512" class="img-responsive"></a>
+                                    <br><span class="app-title"><a href="{% url 'app_release_project' app.project.project_code_name %}">{{ app.project.title }}</a></span>
+                                    <div style="width: 200px;" >{{ app.description }}</div>
+                                    <!--<br>-->
+                                      <!--<div>-->
+                                        <!--iOS Release: <a href="{% url "/applab/app/">{{ app.ios.major_version }}.{{ app.ios.minor_version }}.{{ app.ios.point_version }}.{{ app.ios.build_version }}</a>-->
+                                    <!--</div>-->
+                                    <!--<div>-->
+                                      <!--Android Release:<a href="{{app.android.android_project.google_play_link }}">{{ app.android.major_version }}.{{ app.android.minor_version }}.{{ app.android.point_version }}.{{ app.android.build_version }}</a>-->
+                                    <!--</div>-->
+                                  </div>
                                 </div>
-                                <div>
-                                  Android Release:<a href="{{app.android.android_project.google_play_link }}">{{ app.android.major_version }}.{{ app.android.minor_version }}.{{ app.android.point_version }}.{{ app.android.build_version }}</a>
-                                </div>
-                              </div>
                             </div>
-                        </div>
                             {% endif %}
                         {% endfor %}
                     </div>

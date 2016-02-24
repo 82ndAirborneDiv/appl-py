@@ -2,7 +2,7 @@ from django.conf.urls import url
 from apps import views
 
 urlpatterns = [
-    # url(r'^$', views.home_page, name='home_page'),
+    url(r'^$', views.home_page, name='home_page'),
     url(r'^applab/$', views.home_page, name='home_page'),
     url(r'^applab/app/(?P<project_title>[a-zA-Z0-9\-]+)/$',views.app_page,name='app_page'),
     url(r'^applab/ios/$', views.ios_page, name='ios_page'),
