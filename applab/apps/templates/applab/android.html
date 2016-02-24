@@ -39,8 +39,8 @@
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                             <div class="panel panel-default">
                               <div class="panel-body">
-                                <a href="/applab/app/android-{{ app.project_overview.project.title.split|join:'-' }}"><img src="{{ app.android_project.project_overview.icon.url }}" width="512" height="512" class="img-responsive"></a>
-                                <br><span class="app-title"><a href="/applab/app/android-{{ app.android_project.project_overview.project.title.split|join:'-' }}">{{app.android_project.project_overview.project.title }} For Android {{ app.major_version }}.{{ app.minor_version }}.{{ app.point_version }}.{{ app.build_version }}</a></span>
+                                <a href="/applab/app/android-{{ app.android_project.project_overview.project.title.split|join:'-' }}-{{ app.major_version }}-{{ app.minor_version }}-{{ app.point_version }}-{{ app.build_version }}"><img src="{{ app.android_project.project_overview.icon.url }}" width="512" height="512" class="img-responsive"></a>
+                                <br><span class="app-title"><a href="/applab/app/android-{{ app.android_project.project_overview.project.title.split|join:'-' }}-{{ app.major_version }}-{{ app.minor_version }}-{{ app.point_version }}-{{ app.build_version }}">{{app.android_project.project_overview.project.title }} For Android {{ app.major_version }}.{{ app.minor_version }}.{{ app.point_version }}.{{ app.build_version }}</a></span>
                                 <div>{{ app.android_project.project_overview.description }}</div>
                               </div>
                             </div>
