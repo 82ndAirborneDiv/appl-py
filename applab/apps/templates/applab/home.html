@@ -19,7 +19,7 @@
 
             <div class="row">
                 <div class="col-lg-12 new-release-title">
-                    <h4>New App Releases</h4>
+                    <h4>Featured Apps</h4>
                 </div>
             </div>
 
@@ -34,7 +34,7 @@
                                   <div class="panel-body">
                                     <a href="{% url 'app_release_project' app.project.project_code_name %}"><img src="{{ app.icon.url }}" width="512" height="512" class="img-responsive"></a>
                                     <br><span class="app-title"><a href="{% url 'app_release_project' app.project.project_code_name %}">{{ app.project.title }}</a></span>
-                                    <div style="width: 200px;" >{{ app.description }}</div>
+                                    <div style="height: 50px;" >{{ app.description }}</div>
                                     <!--<br>-->
                                       <!--<div>-->
                                         <!--iOS Release: <a href="{% url "/applab/app/">{{ app.ios.major_version }}.{{ app.ios.minor_version }}.{{ app.ios.point_version }}.{{ app.ios.build_version }}</a>-->
