@@ -202,6 +202,11 @@ box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.09);
     border-top: 1px solid #e0e0e0;
     
 }
+.version-released {
+    color: #9f9f9f;
+    font-style: italic;
+    margin-bottom:20px;
+}
 @media(max-width:767px) {
     .intro-message {
         padding-bottom: 15%;
