@@ -13,9 +13,9 @@
                             Filter by <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'platform_page' platform_app.platform 'releasedate' %}">Latest release date</a></li>
-                                <li><a href="{% url 'platform_page' platform_app.platform 'name' %}">Name</a></li>
-                                <li><a href="{% url 'platform_page' platform_app.platform 'namedesc' %}">Name Descending</a></li>
+                                <li><a href="{% url 'platform_page' platform_app.platform 'sortreleasedate' %}">Latest release date</a></li>
+                                <li><a href="{% url 'platform_page' platform_app.platform 'sortname' %}">Name</a></li>
+                                <li><a href="{% url 'platform_page' platform_app.platform 'sortnamedesc' %}">Name Descending</a></li>
                             </ul>
                         </div>
                         <!--<div class="input-group">-->
@@ -40,9 +40,9 @@
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                             <div class="panel panel-default">
                               <div class="panel-body">
-                                <a href="{% url ios-{{ app.ios_project.project_overview.project.title.split|join:'-' }}-{{ app.major_version }}-{{ app.minor_version }}-{{ app.point_version }}-{{ app.build_version }}"><img src="{{ app.ios_project.project_overview.icon.url }}" width="512" height="512" class="img-responsive"></a>
-                                <br><span class="app-title"><a href="/applab/app/ios-{{ app.ios_project.project_overview.project.title.split|join:'-' }}-{{ app.major_version }}-{{ app.minor_version }}-{{ app.point_version }}-{{ app.build_version }}">{{app.ios_project.project_overview.project.title }} {{ app.major_version }}.{{ app.minor_version }}.{{ app.point_version }}.{{ app.build_version }}</a></span>
-                                <div class="desc-box">{{ app.ios_project.project_overview.description }}</div>
+                                <a href="{% url {{app.platform}}-{{ app.title.split|join:'-' }}-{{ app.major_version }}-{{ app.minor_version }}-{{ app.point_version }}-{{ app.build_version }}"><img src="{{ app.icon_url }}" width="512" height="512" class="img-responsive"></a>
+                                <br><span class="app-title"><a href="/applab/app/ios-{{ app.ios_project.project_overview.project.title.split|join:'-' }}-{{ app.major_version }}-{{ app.minor_version }}-{{ app.point_version }}-{{ app.build_version }}">{{app.title }} {{ app.major_version }}.{{ app.minor_version }}.{{ app.point_version }}.{{ app.build_version }}</a></span>
+                                <div class="desc-box">{{ app.description }}</div>
                               </div>
                             </div>
                         </div>

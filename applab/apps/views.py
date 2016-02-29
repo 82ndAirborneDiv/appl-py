@@ -86,21 +86,30 @@ def platform_page(request,platform,sortfield=None):
     platform_app = {}
     if sortfield:
         sortfield = sortfield.lower()
-        if sortfield =='name':
+        if sortfield =='sortname':
            sortfield = platform + '_project__project_overview__project__title'
-        if sortfield =='namedesc':
+        if sortfield =='sortnamedesc':
            sortfield = '-'+ platform + '_project__project_overview__project__title'
-        elif sortfield == 'releasedate':
+        elif sortfield == 'sortreleasedate':
             sortfield = '-timestamp'
     else:
         sortfield = '-timestamp'
 
     if platform == 'ios':
-       platform_app['apps'] = IosRelease.objects.prefetch_related('ios_project__project_overview__project').exclude(ios_project__project_overview__project__is_archived = True).order_by(sortfield)
+       apps = IosRelease.objects.select_related('ios_project__project_overview__project').exclude(ios_project__project_overview__project__is_archived = True).order_by(sortfield)
+       for app in apps:
+           app.title = app.ios_project.project_overview.project.title
+           app.icon_url =  app.ios_project.project_overview.icon.url
+           app.description = app.ios_project.project_overview.description
     elif platform == 'android':
-       platform_app['apps'] = AndroidRelease.objects.select_related('android_project__project_overview__project').exclude(android_project__project_overview__project__is_archived = True).order_by(sortfield)
-
+       apps = AndroidRelease.objects.select_related('android_project__project_overview__project').exclude(android_project__project_overview__project__is_archived = True).order_by(sortfield)
+       for app in apps:
+           app.title = app.android_project.project_overview.project.title
+           app.icon_url =  app.android_project.project_overview.icon.url
+           app.description = app.android_project.project_overview.description
+    platform_app['apps'] = apps
     platform_app['platform'] = platform
+
     return render(request,'applab/platform-page.html/', {
         'platform_app' : platform_app
     })
