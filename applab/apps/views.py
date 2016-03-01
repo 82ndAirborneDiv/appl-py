@@ -90,16 +90,16 @@ def app_release(request,platform,release_id):
 
         curRelease = IosRelease.objects.select_related('ios_project__project_overview__project').filter(id=release_id)[0]
         overview = curRelease.ios_project.project_overview
-        previousReleases = IosRelease.objects.filter(ios_project_id=curRelease.ios_project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[1:historyLimit+1]
+        previousReleases = IosRelease.objects.filter(ios_project_id=curRelease.ios_project_id).exclude(id=curRelease.id).order_by('-major_version','-minor_version','-point_version','-build_version')[:historyLimit+1]
     elif platform == 'android':
         curRelease = AndroidRelease.objects.select_related('android_project__project_overview__project').filter(id=release_id)[0]
         overview = curRelease.android_project.project_overview
-        previousReleases = AndroidRelease.objects.filter(android_project_id=curRelease.android_project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[1:historyLimit+1   ]
+        previousReleases = AndroidRelease.objects.filter(android_project_id=curRelease.android_project_id).exclude(id=curRelease.id).order_by('-major_version','-minor_version','-point_version','-build_version')[:historyLimit+1]
     screenshots = ProjectOverviewScreenshot.objects.filter(project_overview = overview.project_id)
     appDetail = {
         'overview' : overview,
         'currentRelease' : curRelease,
-        'previousRelease' : previousReleases,
+        'previousReleases' : previousReleases,
         'screenshotGroups4': [screenshots[i:i + groupSize] for i in range(0, len(screenshots), groupSize)],
         'screenshotGroups1':[screenshots[i:i + 1] for i in range(0, len(screenshots), 1)],
         'title': overview.project.title,

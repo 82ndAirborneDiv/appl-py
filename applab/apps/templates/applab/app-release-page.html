@@ -12,7 +12,7 @@
                             <img src="{{ appDetail.overview.icon.url }}" width="512" height="512" class="img-responsive">
                         </div>
                         <div class="col-lg-10 col-md-10 col-sm-9 col-xs-7">
-                            <h1>{{appDetail.title}} {{ appDetail.releaseVersion }} ({{appDetail.platform}})</h1>
+                            <h1>{{appDetail.title}} <span class="icon-{{appDetail.platform}}"></span></h1>
                             <p class="version-text">Version {{ appDetail.releaseVersion }}
                                 <br><i>Updated: {{ appDetail.currentRelease.timestamp}}</i></p>
                             <button type="button" class="btn btn-success dl-btn">Download</button>
@@ -137,17 +137,17 @@
                         <div class="panel-heading" role="tab" id="headingOne">
                           <h4 class="panel-title">
                             <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                              Collapsible Group Item #1
+                              Other Releases
                             </a>
                           </h4>
                         </div>
                         <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                           <div class="panel-body">
                             <div class="row">
-                                {% for previousRelease in previousReleases %}
+                                {% for previousRelease in appDetail.previousReleases %}
                                   <div class="col-lg-4 col-md-4">
-                                      <strong><a href="{% url 'app_release' appDetail.platform previousRelease.id %}">{{appDetail.title}}</a></strong><br>
-                                        <span class="version-released">{{appDetail.previousRelease.major_version}}.{{appDetail.previousRelease.minor_version}}.{{appDetail.previousRelease.point_version}}{{appDetail.previousRelease.build_version}}<br>
+                                      <strong><a href="{% url 'app_release_page' appDetail.platform previousRelease.id %}">{{appDetail.title}}</a></strong><br>
+                                        <span class="version-released">Release {{previousRelease.major_version}}.{{previousRelease.minor_version}}.{{previousRelease.point_version}}.{{previousRelease.build_version}}<br>
                                         Released: {{previousRelease.timestamp}}</span>
                                         <br><br>
                                   </div>
