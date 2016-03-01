@@ -1,23 +1,35 @@
+import copy
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import Project, ProjectOverview,IosProject,IosRelease,AndroidProject,AndroidRelease, ProjectOverviewScreenshot
 
 @login_required()
 def home_page(request):
-
-    apps_to_display = ProjectOverview.objects.filter(project__in=Project.objects.filter(is_archived=False).order_by('title'))
-    for app in apps_to_display:
-        androidRelease =    AndroidRelease.objects.select_related('android_project__project_overview').filter(android_project__project_overview__project_id=app.project_id).order_by('-major_version','-minor_version','-point_version','-build_version')
-        iosRelease =        IosRelease.objects.select_related('ios_project__project_overview').filter(ios_project__project_overview__project_id=app.project_id).order_by('-major_version','-minor_version','-point_version','-build_version')
+    apps_to_display = []
+    avail_apps = ProjectOverview.objects.select_related('project').filter(project__in=Project.objects.filter(is_archived=False))
+    for app in avail_apps:
+        one_app = {}
+        one_app['title'] = app.project.title
+        one_app['description'] = app.description
+        one_app['icon'] = app.icon
         try:
-            app.android =  androidRelease[0]
+            release = AndroidRelease.objects.select_related('android_project__project_overview').filter(android_project__project_overview__project_id=app.project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+            one_app['platform'] = 'android'
+            one_app['releaseDate'] = release.timestamp
+            one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.major_version,release.point_version,release.build_version)
+            one_app['id'] = release.id
+            apps_to_display.append(copy.copy(one_app))
         except IndexError:
-            app.android = None
+            pass
         try:
-            app.ios = iosRelease[0]
+            release =  IosRelease.objects.select_related('ios_project__project_overview').filter(ios_project__project_overview__project_id=app.project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+            one_app['platform'] = 'ios'
+            one_app['releaseDate'] = release.timestamp
+            one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.minor_version,release.point_version,release.build_version)
+            one_app['id'] = release.id
+            apps_to_display.append(copy.copy(one_app))
         except IndexError:
-            app.ios = None;
-        app.screenshots =  ProjectOverviewScreenshot.objects.filter(project_overview = app.project_id)
+            pass
 
     return render(request, 'applab/home.html', {'apps': apps_to_display})
 
@@ -144,6 +156,7 @@ def platform_page(request,platform,sortfield=None):
            app.icon_url =  app.ios_project.project_overview.icon.url
            app.description = app.ios_project.project_overview.description
            app.release_id = app.id
+           app.releaseVersion = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
     elif platform == 'android':
        apps = AndroidRelease.objects.select_related('android_project__project_overview__project').exclude(android_project__project_overview__project__is_archived = True).order_by(sortfield)
        for app in apps:
@@ -151,6 +164,7 @@ def platform_page(request,platform,sortfield=None):
            app.icon_url =  app.android_project.project_overview.icon.url
            app.description = app.android_project.project_overview.description
            app.release_id = app.id
+           app.releaseVersion = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
     platform_app['apps'] = apps
     platform_app['platform'] = platform
 
