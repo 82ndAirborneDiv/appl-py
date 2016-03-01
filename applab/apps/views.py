@@ -42,8 +42,8 @@ def android_page(request):
 def app_page(request,release_id):
     if request.META['HTTP_USER_AGENT'].find('iPhone') != -1:
         groupSize = 1
-    else:
-        groupSize = 4
+    # else:
+    #     groupSize = 4
     historyLimit = 6
     platform = project_title.split('-')[0]
     appTitle = ' '.join(project_title.split('-')[1:-4])
@@ -62,7 +62,8 @@ def app_page(request,release_id):
         'overview' : appOverview,
         'releaseDetail': curRelease,
         'previousRelease' : previousReleases,
-        'screenshotGroups': [screenshots[i:i + groupSize] for i in range(0, len(screenshots), groupSize)],
+        'screenshotGroups4': [screenshots[i:i + groupSize] for i in range(0, len(screenshots), groupSize)],
+        'screenshotGroups1':[screenshots[i:i + 1] for i in range(0, len(screenshots), 1)],
         'title': appTitle,
         'platform': platform,
         'releaseVersion': '.'.join(appRelease)
@@ -73,13 +74,12 @@ def app_page(request,release_id):
     })
 
 def app_release(request,platform,release_id):
-    #if request.flavour == 'mobile':
-    if request.META['HTTP_USER_AGENT'].find('iPhone') != -1:
-        groupSize = 1
-    elif request.META['HTTP_USER_AGENT'].find('iPad') != 1:
-        groupSize = 2
-    else:
-        groupSize = 4
+    # if request.META['HTTP_USER_AGENT'].find('iPhone') != -1:
+    #     groupSize = 1
+    # elif request.META['HTTP_USER_AGENT'].find('iPad') != 1:
+    #     groupSize = 2
+    # else:
+    groupSize = 4
     historyLimit = 6
 
     # appTitle = ' '.join(project_title.split('-')[1:-4])
@@ -87,6 +87,7 @@ def app_release(request,platform,release_id):
 
 
     if platform == 'ios':
+
         curRelease = IosRelease.objects.select_related('ios_project__project_overview__project').filter(id=release_id)[0]
         overview = curRelease.ios_project.project_overview
         previousReleases = IosRelease.objects.filter(ios_project_id=curRelease.ios_project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[1:historyLimit+1]
@@ -99,7 +100,8 @@ def app_release(request,platform,release_id):
         'overview' : overview,
         'currentRelease' : curRelease,
         'previousRelease' : previousReleases,
-        'screenshotGroups': [screenshots[i:i + groupSize] for i in range(0, len(screenshots), groupSize)],
+        'screenshotGroups4': [screenshots[i:i + groupSize] for i in range(0, len(screenshots), groupSize)],
+        'screenshotGroups1':[screenshots[i:i + 1] for i in range(0, len(screenshots), 1)],
         'title': overview.project.title,
         'platform': platform,
         'releaseVersion': '{0}.{1}.{2}.{3}'.format(curRelease.major_version,curRelease.minor_version,curRelease.point_version,curRelease.build_version)
