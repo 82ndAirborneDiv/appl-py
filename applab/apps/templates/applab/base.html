@@ -59,7 +59,7 @@
                         <a href="#">Web Showcase</a>
                     </li>
                     <li>
-                        <a href="/applab/">AppLab</a>
+                        <a href="{% url 'home_page' %}">AppLab</a>
                     </li>
                     <li>
                         <a href="#">Engagement Request</a>
@@ -69,8 +69,13 @@
                     </li>
                     {% if user.is_authenticated %}
                     <li>
-                        <a href="{% url 'django.contrib.auth.views.logout' %}">Log Out</a>
+                        <a href="{% url 'logout' %}">Log Out</a>
                     </li>
+                        {% if user.is_staff %}
+                            <li>
+                                <a href="/admin/">Admin</a>
+                            </li>
+                        {% endif %}
                     {% endif %}
                 </ul>
             </div>

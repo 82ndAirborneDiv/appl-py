@@ -36,6 +36,7 @@ def home_page(request):
 def login(request):
     return render(request, 'applab/templates/registration/login.html')
 
+@login_required()
 def ios_page(request):
     #apps = IosProject.objects.select_related('project_overview').exclude(project_overview__project__is_archived = True).order_by('project_overview__project__title')
     apps = IosRelease.objects.select_related('ios_project').exclude(ios_project__project_overview__project__is_archived = True).order_by('-timestamp')
@@ -43,6 +44,7 @@ def ios_page(request):
         'apps' : apps,
     })
 
+@login_required()
 def android_page(request):
     #apps = AndroidProject.objects.select_related('project_overview').exclude(project_overview__project__is_archived = True)
     apps = AndroidRelease.objects.select_related('android_project').exclude(android_project__project_overview__project__is_archived = True).order_by('-timestamp')
@@ -50,7 +52,7 @@ def android_page(request):
         'apps' : apps,
     })
 
-
+@login_required()
 def app_page(request,release_id):
     if request.META['HTTP_USER_AGENT'].find('iPhone') != -1:
         groupSize = 1
@@ -84,7 +86,7 @@ def app_page(request,release_id):
     return render(request,'applab/app-page.html/',{
         'appDetail' : appDetail,
     })
-
+@login_required()
 def app_release(request,platform,release_id):
     # if request.META['HTTP_USER_AGENT'].find('iPhone') != -1:
     #     groupSize = 1
@@ -123,6 +125,7 @@ def app_release(request,platform,release_id):
         'appDetail' : appDetail,
     })
 
+@login_required()
 def project_page(request,codename):
     groupSize = 4
     app  = ProjectOverview.objects.filter(project__in=Project.objects.filter(project_code_name = codename))
@@ -136,6 +139,7 @@ def project_page(request,codename):
         'projectDetail' : projectDetail,
     })
 
+@login_required()
 def platform_page(request,platform,sortfield=None):
     platform_app = {}
     if sortfield:
