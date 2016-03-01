@@ -60,7 +60,7 @@
                         <a href="#">Web Showcase</a>
                     </li>
                     <li>
-                        <a href="/applab/">AppLab</a>
+                        <a href="{% url 'home_page' %}">AppLab</a>
                     </li>
                     <li>
                         <a href="#">Engagement Request</a>
@@ -70,8 +70,13 @@
                     </li>
                     {% if user.is_authenticated %}
                     <li>
-                        <a href="{% url 'django.contrib.auth.views.logout' %}">Log Out</a>
+                        <a href="{% url 'logout' %}">Log Out</a>
                     </li>
+                        {% if user.is_staff %}
+                            <li>
+                                <a href="/admin/">Admin</a>
+                            </li>
+                        {% endif %}
                     {% endif %}
                 </ul>
             </div>
@@ -88,13 +93,13 @@
                 <div class="col-lg-12 sub-controls"><br><br>
                     <div class="btn-group btn-group-justified" role="group" aria-label="...">
                       <div class="btn-group" role="group">
-                        <a href="/applab/" class="btn btn-default" role="button">Featured Apps</a>
+                        <a href="{% url 'home_page' %}" class="btn btn-default" role="button">Featured Apps</a>
                       </div>
                       <div class="btn-group" role="group">
-                        <a href="/applab/ios" class="btn btn-default" role="button">iOs Apps</a>
+                        <a href="{% url 'platform_page' "iOS" %}" class="btn btn-default" role="button">iOs Apps</a>
                       </div>
                       <div class="btn-group" role="group">
-                        <a href="/applab/android" class="btn btn-default" role="button">Android Apps</a>
+                        <a href="{% url 'platform_page' "android" %}" class="btn btn-default" role="button">Android Apps</a>
                       </div>
                       <!--<div class="btn-group" role="group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

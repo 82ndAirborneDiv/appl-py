@@ -24,6 +24,7 @@ def home_page(request):
 def login(request):
     return render(request, 'applab/templates/registration/login.html')
 
+@login_required()
 def ios_page(request):
     #apps = IosProject.objects.select_related('project_overview').exclude(project_overview__project__is_archived = True).order_by('project_overview__project__title')
     apps = IosRelease.objects.select_related('ios_project').exclude(ios_project__project_overview__project__is_archived = True).order_by('-timestamp')
@@ -31,6 +32,7 @@ def ios_page(request):
         'apps' : apps,
     })
 
+@login_required()
 def android_page(request):
     #apps = AndroidProject.objects.select_related('project_overview').exclude(project_overview__project__is_archived = True)
     apps = AndroidRelease.objects.select_related('android_project').exclude(android_project__project_overview__project__is_archived = True).order_by('-timestamp')
@@ -38,7 +40,21 @@ def android_page(request):
         'apps' : apps,
     })
 
+@login_required()
+def platform_page(request, platform):
+    plat = str.lower(platform)
+    page = ""
+    apps = {}
+    if str.lower(plat) == "ios":
+        page = 'applab/ios.html'
+        apps = IosRelease.objects.select_related('ios_project').exclude(ios_project__project_overview__project__is_archived = True).order_by('-timestamp')
+    elif str.lower(plat) == "android":
+        page = 'applab/android.html'
+        apps = AndroidRelease.objects.select_related('android_project').exclude(android_project__project_overview__project__is_archived = True).order_by('-timestamp')
 
+    return render(request, page, { 'apps': apps})
+
+@login_required()
 def app_page(request,project_title):
     groupSize = 4
     platform = project_title.split('-')[0]
@@ -64,6 +80,7 @@ def app_page(request,project_title):
         'appDetail' : appDetail,
     })
 
+@login_required()
 def project_page(request,codename):
     groupSize = 4
     app  = ProjectOverview.objects.filter(project__in=Project.objects.filter(project_code_name = codename))
