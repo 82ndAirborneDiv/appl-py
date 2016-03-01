@@ -39,8 +39,11 @@ def android_page(request):
     })
 
 
-def app_page(request,project_title):
-    groupSize = 4
+def app_page(request,release_id):
+    if request.META['HTTP_USER_AGENT'].find('iPhone') != -1:
+        groupSize = 1
+    else:
+        groupSize = 4
     historyLimit = 6
     platform = project_title.split('-')[0]
     appTitle = ' '.join(project_title.split('-')[1:-4])
@@ -66,6 +69,43 @@ def app_page(request,project_title):
     }
     #appDetail.appRelease = '{0}.{1}.{2}.{3}'.format(appDetail.major_version,appDetail.minor_version,appDetail.point_version,appDetail.build_version)
     return render(request,'applab/app-page.html/',{
+        'appDetail' : appDetail,
+    })
+
+def app_release(request,platform,release_id):
+    #if request.flavour == 'mobile':
+    if request.META['HTTP_USER_AGENT'].find('iPhone') != -1:
+        groupSize = 1
+    elif request.META['HTTP_USER_AGENT'].find('iPad') != 1:
+        groupSize = 2
+    else:
+        groupSize = 4
+    historyLimit = 6
+
+    # appTitle = ' '.join(project_title.split('-')[1:-4])
+    # appRelease = project_title.rsplit('-')[-4:]
+
+
+    if platform == 'ios':
+        curRelease = IosRelease.objects.select_related('ios_project__project_overview__project').filter(id=release_id)[0]
+        overview = curRelease.ios_project.project_overview
+        previousReleases = IosRelease.objects.filter(ios_project_id=curRelease.ios_project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[1:historyLimit+1]
+    elif platform == 'android':
+        curRelease = AndroidRelease.objects.select_related('android_project__project_overview__project').filter(id=release_id)[0]
+        overview = curRelease.android_project.project_overview
+        previousReleases = AndroidRelease.objects.filter(android_project_id=curRelease.android_project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[1:historyLimit+1   ]
+    screenshots = ProjectOverviewScreenshot.objects.filter(project_overview = overview.project_id)
+    appDetail = {
+        'overview' : overview,
+        'currentRelease' : curRelease,
+        'previousRelease' : previousReleases,
+        'screenshotGroups': [screenshots[i:i + groupSize] for i in range(0, len(screenshots), groupSize)],
+        'title': overview.project.title,
+        'platform': platform,
+        'releaseVersion': '{0}.{1}.{2}.{3}'.format(curRelease.major_version,curRelease.minor_version,curRelease.point_version,curRelease.build_version)
+    }
+    #appDetail.appRelease = '{0}.{1}.{2}.{3}'.format(appDetail.major_version,appDetail.minor_version,appDetail.point_version,appDetail.build_version)
+    return render(request,'applab/app-release-page.html/',{
         'appDetail' : appDetail,
     })
 
@@ -101,12 +141,14 @@ def platform_page(request,platform,sortfield=None):
            app.title = app.ios_project.project_overview.project.title
            app.icon_url =  app.ios_project.project_overview.icon.url
            app.description = app.ios_project.project_overview.description
+           app.release_id = app.id
     elif platform == 'android':
        apps = AndroidRelease.objects.select_related('android_project__project_overview__project').exclude(android_project__project_overview__project__is_archived = True).order_by(sortfield)
        for app in apps:
            app.title = app.android_project.project_overview.project.title
            app.icon_url =  app.android_project.project_overview.icon.url
            app.description = app.android_project.project_overview.description
+           app.release_id = app.id
     platform_app['apps'] = apps
     platform_app['platform'] = platform
 
