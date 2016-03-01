@@ -87,13 +87,13 @@
                 <div class="col-lg-12 sub-controls"><br><br>
                     <div id="buttonGroup" class="btn-group btn-group-justified" role="group" aria-label="...">
                       <div class="btn-group" role="group">
-                        <a id="featured" href="/applab/" class="btn btn-default" role="button" onclick="setActive(this);">Featured Apps</a>
+                        <a id="featured" href="{% url 'home_page' %}" class="btn btn-default" role="button" onclick="setActive(this);">Featured Apps</a>
                       </div>
                       <div class="btn-group" role="group">
-                        <a id="ios" href="/applab/ios" class="btn btn-default" role="button" onclick="setActive(this);">iOs Apps</a>
+                        <a id="ios" href="{% url 'platform_page' 'ios' %}" class="btn btn-default" role="button" onclick="setActive(this);">iOs Apps</a>
                       </div>
                       <div class="btn-group" role="group">
-                        <a id="android" href="/applab/android" class="btn btn-default" role="button" onclick="setActive(this);">Android Apps</a>
+                        <a id="android" href="{% url 'platform_page' 'android' %}" class="btn btn-default" role="button" onclick="setActive(this);">Android Apps</a>
                       </div>
                       <!--<div class="btn-group" role="group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
