@@ -70,7 +70,7 @@
                     </li>
                     {% if user.is_authenticated %}
                     <li>
-                        <a href="{% url 'logout' %}">Log Out</a>
+                        <a href="{% url 'logout' %}?next={%  url 'home_page' %}">Log Out</a>
                     </li>
                         {% if user.is_staff %}
                             <li>
