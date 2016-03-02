@@ -105,20 +105,24 @@ def app_release(request,platform,release_id):
         curRelease = IosRelease.objects.select_related('ios_project__project_overview__project').filter(id=release_id)[0]
         overview = curRelease.ios_project.project_overview
         previousReleases = IosRelease.objects.filter(ios_project_id=curRelease.ios_project_id).exclude(id=curRelease.id).order_by('-major_version','-minor_version','-point_version','-build_version')[:historyLimit+1]
+        latestRelease = IosRelease.objects.filter(ios_project_id=curRelease.ios_project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
     elif platform == 'android':
         curRelease = AndroidRelease.objects.select_related('android_project__project_overview__project').filter(id=release_id)[0]
         overview = curRelease.android_project.project_overview
         previousReleases = AndroidRelease.objects.filter(android_project_id=curRelease.android_project_id).exclude(id=curRelease.id).order_by('-major_version','-minor_version','-point_version','-build_version')[:historyLimit+1]
+        latestRelease = AndroidRelease.objects.filter(android_project_id=curRelease.android_project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
     screenshots = ProjectOverviewScreenshot.objects.filter(project_overview = overview.project_id)
     appDetail = {
         'overview' : overview,
         'currentRelease' : curRelease,
         'previousReleases' : previousReleases,
+        'latestRelease' : latestRelease,
         'screenshotGroups4': [screenshots[i:i + groupSize] for i in range(0, len(screenshots), groupSize)],
         'screenshotGroups1':[screenshots[i:i + 1] for i in range(0, len(screenshots), 1)],
         'title': overview.project.title,
         'platform': platform,
-        'releaseVersion': '{0}.{1}.{2}.{3}'.format(curRelease.major_version,curRelease.minor_version,curRelease.point_version,curRelease.build_version)
+        'releaseVersion': '{0}.{1}.{2}.{3}'.format(curRelease.major_version,curRelease.minor_version,curRelease.point_version,curRelease.build_version),
+        'latestVersion' : '{0}.{1}.{2}.{3}'.format(latestRelease.major_version,latestRelease.minor_version,latestRelease.point_version,latestRelease.build_version)
     }
     #appDetail.appRelease = '{0}.{1}.{2}.{3}'.format(appDetail.major_version,appDetail.minor_version,appDetail.point_version,appDetail.build_version)
     return render(request,'applab/app-release-page.html/',{
