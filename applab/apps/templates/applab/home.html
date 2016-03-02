@@ -2,8 +2,7 @@
 {% load staticfiles %}
 
 {% block content %}
-
-            <div class="row">
+      <div class="row">
                 <div class="col-lg-12">
                     <h3>Mobile Application Prototypes (AppLab)</h3>
                     <p>Welcome to AppLab. This is a tool for the IIU, CDC, and its public health partners to test and collaborate on innovative mobile applications. AppLab showcases iOS and Android apps.</p>
@@ -27,21 +26,17 @@
                 <div class="col-lg-12 new-release-content">
                     <div class="row">
                         {% for app in apps %}
-                            {% if app.icon and app.project.title and app.description %}
+                            {% if app.icon and app.title and app.description %}
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                                 <div class="panel panel-default">
 
                                   <div class="panel-body">
-                                    <a href="{% url 'app_release_project' app.project.project_code_name %}"><img src="{{ app.icon.url }}" width="512" height="512" class="img-responsive"></a>
-                                    <br><span class="app-title"><a href="{% url 'app_release_project' app.project.project_code_name %}">{{ app.project.title }}</a></span>
+                                    <a href="{% url 'app_release_page' app.platform app.id %}"><img src="{{ app.icon.url }}" width="512" height="512" class="img-responsive"></a>
+                                    <br><span class="app-title"><a href="{% url 'app_release_page' app.platform app.id %}">{{ app.title }} </a><span class="icon-{{app.platform}}"></span></span>
+                                    <p class="version-text">Version {{ app.releaseVersion }}
+                                        <br><i>Released: {{app.releaseDate | date:"SHORT_DATE_FORMAT"}}</i>
+                                    </p>
                                     <div style="height: 50px;" >{{ app.description }}</div>
-                                    <!--<br>-->
-                                      <!--<div>-->
-                                        <!--iOS Release: <a href="{% url "/applab/app/">{{ app.ios.major_version }}.{{ app.ios.minor_version }}.{{ app.ios.point_version }}.{{ app.ios.build_version }}</a>-->
-                                    <!--</div>-->
-                                    <!--<div>-->
-                                      <!--Android Release:<a href="{{app.android.android_project.google_play_link }}">{{ app.android.major_version }}.{{ app.android.minor_version }}.{{ app.android.point_version }}.{{ app.android.build_version }}</a>-->
-                                    <!--</div>-->
                                   </div>
                                 </div>
                             </div>
