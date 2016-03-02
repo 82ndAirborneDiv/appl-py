@@ -15,8 +15,8 @@
                             <h1>{{appDetail.title}} <span class="icon-{{appDetail.platform}}"></span></h1>
                             <p class="version-text">Version {{ appDetail.releaseVersion }}
                                 <br><i>Updated: {{ appDetail.currentRelease.timestamp}}</i></p>
-                            <button type="button" class="btn btn-success dl-btn">Download</button>
-                            <button type="button" class="btn btn-default gh-btn">View on GitHub</button>
+                            <button type="button" class="btn btn-success dl-btn" >Download</button>
+                            <a href="{{appDetail.overview.source_code_link}}" target="_blank" role="button" class="btn btn-default gh-btn">View on GitHub</a>
                         </div>
                     </div>
                 </div>
