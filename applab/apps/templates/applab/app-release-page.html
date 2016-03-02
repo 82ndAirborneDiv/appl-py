@@ -16,8 +16,7 @@
                             <p class="version-text">Version {{ appDetail.releaseVersion }}
                                 <br><i>Updated: {{ appDetail.currentRelease.timestamp}}</i></p>
 
-                                <a href="{% url 'app_download' appDetail.platform appDetail.currentRelease.id %}" role="button" class="btn btn-success dl-btn">Download</a>
-                            <button type="button" class="btn btn-default gh-btn">View on GitHub</button>
+                            <a href="{% url 'app_download' appDetail.platform appDetail.currentRelease.id %}" role="button" class="btn btn-success dl-btn">Download</a>
                             <a href="{{appDetail.overview.source_code_link}}" target="_blank" role="button" class="btn btn-default gh-btn">View on GitHub</a>
 
                         </div>
