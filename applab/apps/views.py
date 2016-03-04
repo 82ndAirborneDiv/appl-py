@@ -203,6 +203,7 @@ def app_download(request, platform, release_id):
         response = HttpResponse(ipa_file)
 
         response['Content-Length'] = ipa_file._get_size
+        response['Content-Type'] = 'application/octet-stream .ipa'
         response['Content-Disposition'] = 'attachment; filename=%s.ipa' % file_name
 
         return response
@@ -215,6 +216,7 @@ def app_download(request, platform, release_id):
         response = HttpResponse(apk)
 
         response['Content-Length']= apk._get_size
+        response['Content-Type'] = 'application/vnd.android.package-archive'
         response['Content-Disposition'] = 'attachment; filename=%s.apk' % file_name
 
         return (response)
