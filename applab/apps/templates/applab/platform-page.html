@@ -42,8 +42,8 @@
                                 <a href="{% url 'app_release_page' platform_app.platform app.id %}"><img src="{{ app.icon_url }}" width="512" height="512" class="img-responsive"></a>
                                 <br><span class="app-title"><a href="{% url 'app_release_page' platform_app.platform app.id %}">{{app.title }}  </a><span class="icon-{{platform_app.platform}}"></span></span>
                                 <br><span >Release: {{app.releaseVersion}}</span>
-                                  <br><i>Released: {{ app.timestamp | date:"SHORT_DATE_FORMAT"}}</i>
-                                <div class="desc-box">{{ app.description }}</div>
+                                <!--<br><i>Released: {{ app.timestamp | date:"SHORT_DATE_FORMAT"}}</i>-->
+                                <!--<div class="desc-box">{{ app.description }}</div>-->
                               </div>
                             </div>
                         </div>
