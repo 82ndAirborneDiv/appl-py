@@ -1,7 +1,9 @@
-import copy
+import copy, logging, sys
 from django.shortcuts import render, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Project, ProjectOverview,IosProject,IosRelease,AndroidProject,AndroidRelease, ProjectOverviewScreenshot
+
+logger = logging.getLogger(__name__)
 
 @login_required()
 def home_page(request):
@@ -184,28 +186,38 @@ def platform_page(request,platform,sortfield=None):
 
 @login_required()
 def app_download(request, platform, release_id):
+
     if str.lower(platform) == "ios":
-
-        # This code gets the ipa file only. This needs to be modified as follows:
-        # detect browser type
-        # if iPhone or iPad
-            # generate manifest file
-            # response = HttpResponse(manifest_file)
-        # else
-            # response = HttpResponse(ipa_file)
-        # return response
-
         app = IosRelease.objects.select_related('ios_project__project_overview__project').filter(id=release_id)[0]
-
-        ipa_file = app.ipa_file
-
         file_name = app.ios_project.project_overview.project.project_code_name
-        response = HttpResponse(ipa_file)
+    
+        if request.user_agent.is_pc:
+            # This code gets the ipa file only. This needs to be modified as follows:
+            # detect browser type
+            # if iPhone or iPad
+                # generate manifest file
+                # response = HttpResponse(manifest_file)
+            # else
+                # response = HttpResponse(ipa_file)
+            # return response
 
-        response['Content-Length'] = ipa_file._get_size
-        response['Content-Disposition'] = 'attachment; filename=%s.ipa' % file_name
+            ipa_file = app.ipa_file
 
-        return response
+            response = HttpResponse(ipa_file)      
+                  
+            response['Content-Length'] = ipa_file._get_size
+            response['Content-Disposition'] = 'attachment; filename=%s.ipa' % file_name
+
+            return response
+
+        else:
+            manifest_file = app.manifest_file
+            response = HttpResponse(manifest_file)
+
+            response['Content-Length'] = manifest_file._get_size
+            response['Content-Disposition'] = 'attachment; filename=%s.plist' % file_name
+
+            return response
 
     elif str.lower(platform) == "android":
         app = AndroidRelease.objects.select_related('android_project__project_overview__project').filter(id=release_id)[0]
