@@ -18,7 +18,7 @@
 
                             <a href="{% url 'app_download' appDetail.platform appDetail.currentRelease.id %}" role="button" class="btn btn-success dl-btn">Download</a>
                             {% if appDetail.overview.source_code_link %}
-                                <a href="{{appDetail.overview.source_code_link}}" target="_blank" role="button" class="btn btn-default gh-btn">View on GitHub</a>
+                                <a href="{{appDetail.overview.source_code_link}}" target="_blank" role="button" class="btn btn-default gh-btn">View Source</a>
                             {% endif %}
                         </div>
                     </div>
