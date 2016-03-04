@@ -17,8 +17,9 @@
                                 <br><i>Updated: {{ appDetail.currentRelease.timestamp}}</i></p>
 
                             <a href="{% url 'app_download' appDetail.platform appDetail.currentRelease.id %}" role="button" class="btn btn-success dl-btn">Download</a>
-                            <a href="{{appDetail.overview.source_code_link}}" target="_blank" role="button" class="btn btn-default gh-btn">View on GitHub</a>
-
+                            {% if appDetail.overview.source_code_link %}
+                                <a href="{{appDetail.overview.source_code_link}}" target="_blank" role="button" class="btn btn-default gh-btn">View Source</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -125,11 +126,12 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h3>Description</h3>
-                    <p>Welcome to AppLab. This is a tool for the IIU, CDC, and its public health partners to test and collaborate on innovative mobile applications. AppLab showcases iOS and Android apps.</p>
+                    <p>{{ appDetail.overview.description }}</p>
+                    <!--<p>Welcome to AppLab. This is a tool for the IIU, CDC, and its public health partners to test and collaborate on innovative mobile applications. AppLab showcases iOS and Android apps.</p>-->
 
-                    <p>Every app has a page which provides an overview / summary and will often include screenshots. The bottom of the overview page will display the
-                    versions of the app currently available for download. Every app will have at least one version to download. For most users, we recommend
-                    downloading the most recent version (top of the list). </p>
+                    <!--<p>Every app has a page which provides an overview / summary and will often include screenshots. The bottom of the overview page will display the-->
+                    <!--versions of the app currently available for download. Every app will have at least one version to download. For most users, we recommend-->
+                    <!--downloading the most recent version (top of the list). </p>-->
                     <hr class="hr-cust">
 
                 </div>
