@@ -5,6 +5,7 @@ from .models import Project, ProjectOverview,IosProject,IosRelease,AndroidProjec
 
 @login_required()
 def home_page(request):
+    request.session['platform'] = ''
     apps_to_display = []
     avail_apps = ProjectOverview.objects.select_related('project').filter(project__in=Project.objects.filter(is_archived=False))
     for app in avail_apps:
@@ -145,6 +146,7 @@ def project_page(request,codename):
 
 @login_required()
 def platform_page(request,platform,sortfield=None):
+    request.session['platform'] = platform
     platform_app = {}
     if sortfield:
         sortfield = sortfield.lower()
