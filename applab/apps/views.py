@@ -2,6 +2,7 @@ import copy, logging, sys
 from django.shortcuts import render, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Project, ProjectOverview,IosProject,IosRelease,AndroidProject,AndroidRelease, ProjectOverviewScreenshot
+from wsgiref.util import FileWrapper
 
 logger = logging.getLogger(__name__)
 
@@ -139,13 +140,12 @@ def app_download(request, platform, release_id):
 
             ipa_file = app.ipa_file
 
-            response = HttpResponse(ipa_file)      
-                  
+            response = HttpResponse(FileWrapper(ipa_file), content_type='application/octet-stream')
+
             response['Content-Length'] = ipa_file._get_size
             response['Content-Disposition'] = 'attachment; filename=%s.ipa' % file_name
 
             return response
-
         else:
             manifest_file = app.manifest_file
             response = HttpResponse(manifest_file)
@@ -155,16 +155,14 @@ def app_download(request, platform, release_id):
 
             return response
 
-
     elif str.lower(platform) == "android":
         app = AndroidRelease.objects.select_related('android_project__project_overview__project').filter(id=release_id)[0]
 
         apk= app.apk_file
         file_name = app.android_project.project_overview.project.project_code_name
-        response = HttpResponse(apk)
+        response = HttpResponse(FileWrapper(apk), content_type='application/vnd.android.package-archive')
 
         response['Content-Length']= apk._get_size
-        response['Content-Type'] = 'application/vnd.android.package-archive'
         response['Content-Disposition'] = 'attachment; filename=%s.apk' % file_name
 
         return (response)
