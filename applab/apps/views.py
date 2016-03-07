@@ -2,6 +2,7 @@ import copy
 from django.shortcuts import render, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Project, ProjectOverview,IosProject,IosRelease,AndroidProject,AndroidRelease, ProjectOverviewScreenshot
+from wsgiref.util import FileWrapper
 
 @login_required()
 def home_page(request):
@@ -200,10 +201,9 @@ def app_download(request, platform, release_id):
         ipa_file = app.ipa_file
 
         file_name = app.ios_project.project_overview.project.project_code_name
-        response = HttpResponse(ipa_file)
+        response = HttpResponse(FileWrapper(ipa_file), content_type='application/octet-stream')
 
         response['Content-Length'] = ipa_file._get_size
-        response['Content-Type'] = 'application/octet-stream .ipa'
         response['Content-Disposition'] = 'attachment; filename=%s.ipa' % file_name
 
         return response
@@ -213,10 +213,9 @@ def app_download(request, platform, release_id):
 
         apk= app.apk_file
         file_name = app.android_project.project_overview.project.project_code_name
-        response = HttpResponse(apk)
+        response = HttpResponse(FileWrapper(apk), content_type='application/vnd.android.package-archive')
 
         response['Content-Length']= apk._get_size
-        response['Content-Type'] = 'application/vnd.android.package-archive'
         response['Content-Disposition'] = 'attachment; filename=%s.apk' % file_name
 
         return (response)
