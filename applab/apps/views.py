@@ -149,9 +149,9 @@ def app_download(request, platform, release_id):
 
         apk= app.apk_file
         file_name = app.android_project.project_overview.project.project_code_name
-        response = HttpResponse(FileWrapper(apk), content_type='application/vnd.android.package-archive')
+        response = HttpResponse(apk, content_type='application/vnd.android.package-archive')
 
         response['Content-Length']= apk._get_size
         response['Content-Disposition'] = 'attachment; filename=%s.apk' % file_name
 
-        return (response)
+        return response
