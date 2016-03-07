@@ -147,6 +147,10 @@ def app_download(request, platform, release_id):
 
             return response
         else:
+            file = open('manifest.plist', 'w')
+            file.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+            file.write('<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n')
+            print (file)
             manifest_file = app.manifest_file
             response = HttpResponse(manifest_file)
 
