@@ -38,31 +38,32 @@
         <div class="container topnav">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
+                <a class="navbar-brand" href="http://www.phiresearchlab.org"><img src="{% static 'img/iiu-logo.png' %}" class="img-responsive"></a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand topnav" href="#"></a><img src="{% static 'img/iiu-logo.png' %}" width="299" height="45">
+
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#">Home</a>
-                    </li>
-                    <li>
                         <a href="#">Services</a>
                     </li>
                     <li>
-                        <a href="#">Web Showcase</a>
+                        <a href="#">Portfolio</a>
                     </li>
                     <li>
                         <a href="{% url 'home_page' %}">AppLab</a>
                     </li>
                     <li>
-                        <a href="#">Engagement Request</a>
+                        <a href="#">Articles</a>
+                    </li>
+                     <li>
+                        <a href="#">Team</a>
                     </li>
                     <li>
                         <a href="#">Contact</a>
@@ -92,13 +93,13 @@
                 <div class="col-lg-12 sub-controls"><br><br>
                     <div id="buttonGroup" class="btn-group btn-group-justified" role="group" aria-label="...">
                       <div class="btn-group" role="group">
-                        <a id="featured" href="{% url 'home_page' %}" class="btn btn-default {% if request.session.platform == '' %} active {% endif %}" role="button" onclick="setActive(this);">Featured Apps</a>
+                        <a id="featured" href="{% url 'home_page' %}" class="btn btn-default btnfonts {% if request.session.platform == '' %} active {% endif %}" role="button">New Releases</a>
                       </div>
                       <div class="btn-group" role="group">
-                        <a id="ios" href="{% url 'platform_page' 'ios' %}" class="btn btn-default {% if request.session.platform == 'ios' %} active {% endif %}" role="button" onclick="setActive(this);">iOs Apps</a>
+                        <a id="ios" href="{% url 'platform_page' 'ios' %}" class="btn btn-default btnfonts {% if request.session.platform == 'ios' %} active {% endif %}" role="button">iOS Apps</a>
                       </div>
                       <div class="btn-group" role="group">
-                        <a id="android" href="{% url 'platform_page' 'android' %}" class="btn btn-default {% if request.session.platform == 'android' %} active {% endif %}" role="button" onclick="setActive(this);">Android Apps</a>
+                        <a id="android" href="{% url 'platform_page' 'android' %}" class="btn btn-default btnfonts {% if request.session.platform == 'android' %} active {% endif %}" role="button">Android Apps</a>
                       </div>
                       <!--<div class="btn-group" role="group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
