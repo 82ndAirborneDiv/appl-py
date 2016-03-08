@@ -127,7 +127,7 @@ def app_download(request, platform, release_id):
     if str.lower(platform) == "ios":
         app = IosRelease.objects.select_related('ios_project__project_overview__project').filter(id=release_id)[0]
         file_name = app.ios_project.project_overview.project.project_code_name
-    
+        
         if request.user_agent.is_pc:
             # This code gets the ipa file only. This needs to be modified as follows:
             # detect browser type
@@ -147,17 +147,65 @@ def app_download(request, platform, release_id):
 
             return response
         else:
-            file = open('manifest.plist', 'w')
-            file.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-            file.write('<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n')
-            print (file)
-            manifest_file = app.manifest_file
-            response = HttpResponse(manifest_file)
+	        ipa_full_url = request.build_absolute_uri(app.ipa_file.url)
+	        display_image_url = request.build_absolute_uri() #TODO find correct image URL
+	        full_size_image_url = request.build_absolute_uri() ##TODO find correct image URL
+	        bundle_id = app.ios_project.bundle_id
+	        bundle_version = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
+	        app_title = app.ios_project.project_overview.project.title
 
-            response['Content-Length'] = manifest_file._get_size
-            response['Content-Disposition'] = 'attachment; filename=%s.plist' % file_name
+	        file = open('manifest.plist', 'w')
+	        file.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+	        file.write('<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n')
+	        file.write('<plist version="1.0">\n')
+	        file.write('    <dict>\n')
+	        file.write('        <key>items</key>\n')
+	        file.write('            <array>\n')
+	        file.write('                <dict>\n')
+	        file.write('                    <key>assets</key>\n')
+	        file.write('                    <array>\n')
+	        file.write('                    <dict>\n')
+	        file.write('                    	<key>kind</key>\n')
+	        file.write('                    	<string>software-package</string>\n')
+	        file.write('                    	<key>url</key>\n')
+	        file.write('                    	<string>'+ipa_full_url+'</string>\n')
+	        file.write('                    <dict>\n')
+	        file.write('                    <dict>\n')
+	        file.write('                    	<key>kind</key>\n')
+	        file.write('                    	<string>display-image</string>\n')
+	        file.write('                    	<key>url</key>\n')
+	        file.write('                    	<string>'+display_image_url+'</string>\n')
+	        file.write('                    </dict>\n')
+	        file.write('                    <dict>\n')
+	        file.write('                    	<key>kind</key>\n')
+	        file.write('                    	<string>full-size-image</string>\n')
+	        file.write('                    	<key>url</key>\n')
+	        file.write('                    	<string>'+full_size_image_url+'</string>\n')
+	        file.write('                	</dict>\n')
+	        file.write('                </array>\n')
+	        file.write('                <key>metadata</key>\n')
+	        file.write('                <dict>\n')
+	        file.write('                    <key>bundle-identifier</key>\n')
+	        file.write('                    <string>'+bundle_id+'</string>\n')
+	        file.write('                    <key>bundle-version</key>\n')
+	        file.write('                    <string>'+bundle_version+'</string>\n')
+	        file.write('                    <key>kind</key>\n')
+	        file.write('                    <string>software</string>\n')
+	        file.write('                    <key>title</key>\n')
+	        file.write('                	<string>'+app_title+'</string>\n')
+	        file.write('				</dict>\n')
+	        file.write('			</dict>\n')
+	        file.write('		</array>\n')
+	        file.write('	</dict>\n')
+	        file.write('</plist>\n')
+	        
+	        manifest_file = app.manifest_file
+	        response = HttpResponse(manifest_file)
 
-            return response
+	        response['Content-Length'] = manifest_file._get_size
+	        response['Content-Disposition'] = 'attachment; filename=%s.plist' % file_name
+
+	        return response
 
     elif str.lower(platform) == "android":
         app = AndroidRelease.objects.select_related('android_project__project_overview__project').filter(id=release_id)[0]
