@@ -46,7 +46,7 @@
                                 <div class="row">
                                    {% for screen in group %}
                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                         <a href="#myModal" data-toggle="modal" data-target="#myModal"><img src="{{ screen.screenshot.url }}" alt="Image" class="img-responsive center-block"></a>
+                                         <a href="#myModal" data-toggle="modal" data-target="#myModal" class="screen-modal"><img src="{{ screen.screenshot.url }}" alt="Image" class="img-responsive center-block"></a>
                                        </div>
                                     {% endfor %}
                                 </div>
@@ -73,7 +73,7 @@
                                 <div class="row">
                                    {% for screen in group %}
                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                                         <a href="#myModal" data-toggle="modal" data-target="#myModal"><img src="{{ screen.screenshot.url }}" alt="Image" class="img-responsive center-block"></a>
+                                         <a href="#myModal" data-toggle="modal" data-target="#myModal" class="screen-modal"><img src="{{ screen.screenshot.url }}" alt="Image" class="img-responsive center-block"></a>
                                        </div>
                                     {% endfor %}
                                 </div>
@@ -96,14 +96,12 @@
                             <div class="modal-content">
                               <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                               </div>
                               <div class="modal-body">
-                                ...
+                                <img id="modal-img" src="#" alt="Image" class="img-responsive center-block">
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
                               </div>
                             </div>
                           </div>
@@ -172,6 +170,14 @@
         <!-- /.container -->
 
     </div>
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script>
+        $(document).on('click','.screen-modal',function() {
+            var imgSrcVal = $("img", this).attr("src");
+            $('#modal-img').attr('src', imgSrcVal);
+            console.log(imgSrcVal);
+        });
+    </script>
 <script>
     var screenWidth= screen.width;
     var cont1= document.getElementById("cont1");
