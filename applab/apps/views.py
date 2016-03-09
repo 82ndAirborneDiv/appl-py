@@ -40,6 +40,7 @@ def login(request):
 
 @login_required()
 def app_release(request,platform,release_id):
+    request.session['platform'] = platform.lower()
     # if request.META['HTTP_USER_AGENT'].find('iPhone') != -1:
     #     groupSize = 1
     # elif request.META['HTTP_USER_AGENT'].find('iPad') != 1:
@@ -83,7 +84,7 @@ def app_release(request,platform,release_id):
 
 @login_required()
 def platform_page(request,platform,sortfield=None):
-    request.session['platform'] = platform
+    request.session['platform'] = platform.lower()
     platform_app = {}
     if sortfield:
         sortfield = sortfield.lower()
