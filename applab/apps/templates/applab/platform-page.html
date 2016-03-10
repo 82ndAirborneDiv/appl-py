@@ -11,7 +11,7 @@
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Sort by <span class="caret"></span>
                             </button>
-                            <ul class="dropdown-menu">
+                            <ul id="dd-right" class="dropdown-menu">
                                 <li><a href="{% url 'platform_page' platform_app.platform 'sortreleasedate' %}">Latest release date</a></li>
                                 <li><a href="{% url 'platform_page' platform_app.platform 'sortname' %}">Name</a></li>
                             </ul>
