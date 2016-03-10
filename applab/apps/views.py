@@ -71,6 +71,8 @@ def app_release(request,platform,release_id):
         'previousReleases' : previousReleases,
         'latestRelease' : latestRelease,
         'screenshotGroups4': [screenshots[i:i + groupSize] for i in range(0, len(screenshots), groupSize)],
+        'screenshotGroups3': [screenshots[i:i + 3] for i in range(0, len(screenshots), 3)],
+        'screenshotGroups2': [screenshots[i:i + 2] for i in range(0, len(screenshots), 2)],
         'screenshotGroups1':[screenshots[i:i + 1] for i in range(0, len(screenshots), 1)],
         'title': overview.project.title,
         'platform': platform,
