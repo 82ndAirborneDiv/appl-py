@@ -3,6 +3,8 @@ from django.shortcuts import render, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Project, ProjectOverview,IosProject,IosRelease,AndroidProject,AndroidRelease, ProjectOverviewScreenshot
 from wsgiref.util import FileWrapper
+from django_user_agents.utils import get_user_agent
+from .create_manifest import write_manifest
 
 @login_required()
 def home_page(request):
@@ -40,6 +42,7 @@ def login(request):
 
 @login_required()
 def app_release(request,platform,release_id):
+    user_agent = get_user_agent(request)
     request.session['platform'] = platform.lower()
     # if request.META['HTTP_USER_AGENT'].find('iPhone') != -1:
     #     groupSize = 1
@@ -52,13 +55,20 @@ def app_release(request,platform,release_id):
     # appTitle = ' '.join(project_title.split('-')[1:-4])
     # appRelease = project_title.rsplit('-')[-4:]
 
-
     if platform == 'ios':
-
         curRelease = IosRelease.objects.select_related('ios_project__project_overview__project').filter(id=release_id)[0]
         overview = curRelease.ios_project.project_overview
         previousReleases = IosRelease.objects.filter(ios_project_id=curRelease.ios_project_id).exclude(id=curRelease.id).order_by('-major_version','-minor_version','-point_version','-build_version')[:historyLimit+1]
         latestRelease = IosRelease.objects.filter(ios_project_id=curRelease.ios_project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+        if user_agent.is_mobile:
+            ipa_full_url = request.build_absolute_uri(curRelease.ipa_file.url)
+            display_image_url = request.build_absolute_uri(overview.icon.url)
+            full_size_image_url = request.build_absolute_uri() #need to know what this will be
+
+            write_manifest(curRelease, ipa_full_url, display_image_url, full_size_image_url)
+            manifest_file_url = request.build_absolute_uri(curRelease.manifest_file.url)
+        else:
+            manifest_file_url = request.build_absolute_uri(curRelease.manifest_file.url)
     elif platform == 'android':
         curRelease = AndroidRelease.objects.select_related('android_project__project_overview__project').filter(id=release_id)[0]
         overview = curRelease.android_project.project_overview
@@ -75,7 +85,8 @@ def app_release(request,platform,release_id):
         'title': overview.project.title,
         'platform': platform,
         'releaseVersion': '{0}.{1}.{2}.{3}'.format(curRelease.major_version,curRelease.minor_version,curRelease.point_version,curRelease.build_version),
-        'latestVersion' : '{0}.{1}.{2}.{3}'.format(latestRelease.major_version,latestRelease.minor_version,latestRelease.point_version,latestRelease.build_version)
+        'latestVersion' : '{0}.{1}.{2}.{3}'.format(latestRelease.major_version,latestRelease.minor_version,latestRelease.point_version,latestRelease.build_version),
+        'manifestUrl': 'itms-services://?action=download-manifest&url=' + manifest_file_url,
     }
     #appDetail.appRelease = '{0}.{1}.{2}.{3}'.format(appDetail.major_version,appDetail.minor_version,appDetail.point_version,appDetail.build_version)
     return render(request,'applab/app-release-page.html/',{
@@ -123,23 +134,10 @@ def platform_page(request,platform,sortfield=None):
 @login_required()
 def app_download(request, platform, release_id):
     if str.lower(platform) == "ios":
-
-        # This code gets the ipa file only. This needs to be modified as follows:
-        # detect browser type
-        # if iPhone or iPad
-            # generate manifest file
-            # response = HttpResponse(manifest_file)
-        # else
-            # response = HttpResponse(ipa_file)
-        # return response
-
         app = IosRelease.objects.select_related('ios_project__project_overview__project').filter(id=release_id)[0]
-
-        ipa_file = app.ipa_file
-
         file_name = app.ios_project.project_overview.project.project_code_name
+        ipa_file = app.ipa_file
         response = HttpResponse(FileWrapper(ipa_file), content_type='application/octet-stream')
-
         response['Content-Disposition'] = 'attachment; filename=%s.ipa' % file_name
 
         return response
