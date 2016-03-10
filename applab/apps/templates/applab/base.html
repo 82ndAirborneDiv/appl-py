@@ -163,13 +163,21 @@ Centers for Disease Control and Prevention | Department of Health and Human Serv
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script>
-        $(document).on('click','.navbar-collapse.in',function(e) {
+        var navbar = document.getElementById('bs-example-navbar-collapse-1');
+        function closeNav() {
+            $(navbar).collapse('hide');
+        }
+             $(document).click(function(e) {
+                closeNav();
+             });
+            $(document).on('click', '.navbar-collapse.in', function (e) {
 
-            if( $(e.target).is('a') && ( $(e.target).attr('class') != 'dropdown-toggle' ) ) {
-                $(this).collapse('hide');
-            }
+                if ($(e.target).is('a') && ( $(e.target).attr('class') != 'dropdown-toggle' )) {
+                    $(this).collapse('hide');
+                }
 
-        });
+            });
+
     </script>
 </body>
 
