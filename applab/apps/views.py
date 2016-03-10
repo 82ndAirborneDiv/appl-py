@@ -64,6 +64,8 @@ def app_release(request,platform,release_id):
             ipa_full_url = request.build_absolute_uri(curRelease.ipa_file.url)
             write_manifest(curRelease, ipa_full_url)
             manifest_file_url = request.build_absolute_uri(curRelease.manifest_file.url)
+        else:
+            manifest_file_url = request.build_absolute_uri(curRelease.manifest_file.url)
 
     elif platform == 'android':
         curRelease = AndroidRelease.objects.select_related('android_project__project_overview__project').filter(id=release_id)[0]
