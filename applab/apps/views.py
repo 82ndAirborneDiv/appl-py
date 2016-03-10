@@ -40,6 +40,7 @@ def login(request):
 
 @login_required()
 def app_release(request,platform,release_id):
+    request.session['platform'] = platform.lower()
     # if request.META['HTTP_USER_AGENT'].find('iPhone') != -1:
     #     groupSize = 1
     # elif request.META['HTTP_USER_AGENT'].find('iPad') != 1:
@@ -83,7 +84,7 @@ def app_release(request,platform,release_id):
 
 @login_required()
 def platform_page(request,platform,sortfield=None):
-    request.session['platform'] = platform
+    request.session['platform'] = platform.lower()
     platform_app = {}
     if sortfield:
         sortfield = sortfield.lower()
@@ -139,7 +140,6 @@ def app_download(request, platform, release_id):
         file_name = app.ios_project.project_overview.project.project_code_name
         response = HttpResponse(FileWrapper(ipa_file), content_type='application/octet-stream')
 
-        response['Content-Length'] = ipa_file._get_size
         response['Content-Disposition'] = 'attachment; filename=%s.ipa' % file_name
 
         return response
@@ -149,9 +149,7 @@ def app_download(request, platform, release_id):
 
         apk= app.apk_file
         file_name = app.android_project.project_overview.project.project_code_name
-        response = HttpResponse(FileWrapper(apk), content_type='application/vnd.android.package-archive')
-
-        response['Content-Length']= apk._get_size
+        response = HttpResponse(apk, content_type='application/vnd.android.package-archive')
         response['Content-Disposition'] = 'attachment; filename=%s.apk' % file_name
 
-        return (response)
+        return response
