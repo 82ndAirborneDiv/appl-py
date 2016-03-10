@@ -62,13 +62,9 @@ def app_release(request,platform,release_id):
         latestRelease = IosRelease.objects.filter(ios_project_id=curRelease.ios_project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
         if user_agent.is_mobile:
             ipa_full_url = request.build_absolute_uri(curRelease.ipa_file.url)
-            display_image_url = request.build_absolute_uri(overview.icon.url)
-            full_size_image_url = request.build_absolute_uri() #need to know what this will be
+            write_manifest(curRelease, ipa_full_url)
+            manifest_file_url = request.build_absolute_uri(curRelease.manifest_file.url)
 
-            write_manifest(curRelease, ipa_full_url, display_image_url, full_size_image_url)
-            manifest_file_url = request.build_absolute_uri(curRelease.manifest_file.url)
-        else:
-            manifest_file_url = request.build_absolute_uri(curRelease.manifest_file.url)
     elif platform == 'android':
         curRelease = AndroidRelease.objects.select_related('android_project__project_overview__project').filter(id=release_id)[0]
         overview = curRelease.android_project.project_overview
