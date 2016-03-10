@@ -39,7 +39,7 @@ class ProjectOverview(models.Model):
     icon_image.allow_tags = True
 
     def __str__(self):
-        return '%d.%d' % (self.major_version, self.minor_version)
+        return '%s %d.%d' % (self.project.title, self.major_version, self.minor_version)
 
 
 def overview_screenshot_upload_path(instance, filename):
@@ -67,12 +67,15 @@ class IosProject(models.Model):
     apple_app_store_link = models.URLField()
 
     def __str__(self):
-        return self.bundle_id
+        return '%s' % self.project_overview.project.title
 
 
 class AndroidProject(models.Model):
     project_overview = models.ForeignKey(ProjectOverview, on_delete=models.CASCADE)
     google_play_link = models.URLField()
+
+    def __str__(self):
+        return '%s' % self.project_overview.project.title
 
 
 class Release(models.Model):
@@ -100,10 +103,10 @@ def ipa_upload_path(instance, filename):
 class IosRelease(Release):
     ios_project = models.ForeignKey(IosProject, on_delete=models.CASCADE)
     ipa_file = models.FileField(upload_to=ipa_upload_path)
-    manifest_file = models.FileField()
+    manifest_file = models.FileField(upload_to=ipa_upload_path)
 
     def __str__(self):
-        return '%d.%d.%d.%d' % (self.major_version, self.minor_version, self.point_version, self.build_version)
+        return '%s %d.%d.%d.%d' % (self.ios_project.project_overview.project.title, self.major_version, self.minor_version, self.point_version, self.build_version)
 
 
 def apk_upload_path(instance, filename):
@@ -115,5 +118,9 @@ def apk_upload_path(instance, filename):
 class AndroidRelease(Release):
     android_project = models.ForeignKey(AndroidProject, on_delete=models.CASCADE)
     apk_file = models.FileField(upload_to=apk_upload_path)
+
+    def __str__(self):
+        return '%s %d.%d.%d.%d' % (self.android_project.project_overview.project.title, self.major_version, self.minor_version, self.point_version, self.build_version)
+
 
 
