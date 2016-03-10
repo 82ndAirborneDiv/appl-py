@@ -18,7 +18,7 @@ class Project(models.Model):
 
 def overview_icon_upload_path(instance, filename):
     date_created = str(localtime(instance.date_published).strftime('%Y-%m-%d_%I-%M_%p'))
-    return os.path.join(MEDIA_ROOT, instance.project.project_code_name, date_created, "icons", filename)
+    return os.path.join(instance.project.project_code_name, date_created, "icons", filename)
 
 
 class ProjectOverview(models.Model):
@@ -41,9 +41,10 @@ class ProjectOverview(models.Model):
     def __str__(self):
         return '%d.%d' % (self.major_version, self.minor_version)
 
+
 def overview_screenshot_upload_path(instance, filename):
     date_created = str(localtime(instance.project_overview.date_published).strftime('%Y-%m-%d_%I-%M_%p'))
-    return os.path.join(MEDIA_ROOT, instance.project_overview.project.project_code_name, date_created, "screenshots", filename)
+    return os.path.join(instance.project_overview.project.project_code_name, date_created, "screenshots", filename)
 
 
 class ProjectOverviewScreenshot(models.Model):
@@ -93,7 +94,7 @@ class Release(models.Model):
 def ipa_upload_path(instance, filename):
     version_path = '%d.%d.%d.%d' % (instance.major_version, instance.minor_version, instance.point_version, instance.build_version)
     platform_path = 'ios'
-    return os.path.join(MEDIA_ROOT, instance.ios_project.project_overview.project.project_code_name, platform_path, version_path, filename)
+    return os.path.join(instance.ios_project.project_overview.project.project_code_name, platform_path, version_path, filename)
 
 
 class IosRelease(Release):
@@ -101,11 +102,14 @@ class IosRelease(Release):
     ipa_file = models.FileField(upload_to=ipa_upload_path)
     manifest_file = models.FileField()
 
+    def __str__(self):
+        return '%d.%d.%d.%d' % (self.major_version, self.minor_version, self.point_version, self.build_version)
+
 
 def apk_upload_path(instance, filename):
     version_path = '%d.%d.%d.%d' % (instance.major_version, instance.minor_version, instance.point_version, instance.build_version)
     platform_path = 'android'
-    return os.path.join(MEDIA_ROOT, instance.android_project.project_overview.project.project_code_name, platform_path, version_path, filename)
+    return os.path.join(instance.android_project.project_overview.project.project_code_name, platform_path, version_path, filename)
 
 
 class AndroidRelease(Release):
