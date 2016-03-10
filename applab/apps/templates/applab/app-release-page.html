@@ -13,7 +13,7 @@
                             <img src="{{ appDetail.overview.icon.url }}" width="512" height="512" class="img-responsive">
                         </div>
                         <div class="col-lg-10 col-md-10 col-sm-9 col-xs-7">
-                            <h1>{{appDetail.title}} <span class="icon-{{appDetail.platform}}"></span></h1>
+                            <h1 class="titlefonts">{{appDetail.title}} <span class="icon-{{appDetail.platform}}"></span></h1>
                             <p class="version-text">Version {{ appDetail.releaseVersion }}
                                 <br><i>Updated: {{ appDetail.currentRelease.timestamp}}</i></p>
                             {% if request|is_pc or appDetail.platform == 'android' %}
