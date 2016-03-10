@@ -15,7 +15,7 @@ def home_page(request):
         one_app['description'] = app.description
         one_app['icon'] = app.icon
         try:
-            release = AndroidRelease.objects.select_related('android_project__project_overview').filter(android_project__project_overview__project_id=app.project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+            release = AndroidRelease.objects.select_related('android_project__project_overview').filter(android_project__project_overview_id = app.id, is_featured_release=True).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
             one_app['platform'] = 'android'
             one_app['releaseDate'] = release.timestamp
             one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.major_version,release.point_version,release.build_version)
@@ -24,7 +24,7 @@ def home_page(request):
         except IndexError:
             pass
         try:
-            release =  IosRelease.objects.select_related('ios_project__project_overview').filter(ios_project__project_overview__project_id=app.project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+            release =  IosRelease.objects.select_related('ios_project__project_overview').filter(ios_project__project_overview_id=app.id,is_featured_release=True).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
             one_app['platform'] = 'ios'
             one_app['releaseDate'] = release.timestamp
             one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.minor_version,release.point_version,release.build_version)
