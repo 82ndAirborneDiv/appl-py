@@ -54,7 +54,7 @@ def app_release(request,platform,release_id):
 
     # appTitle = ' '.join(project_title.split('-')[1:-4])
     # appRelease = project_title.rsplit('-')[-4:]
-
+    manifest_file_url = ''
     if platform == 'ios':
         curRelease = IosRelease.objects.select_related('ios_project__project_overview__project').filter(id=release_id)[0]
         overview = curRelease.ios_project.project_overview
@@ -63,8 +63,6 @@ def app_release(request,platform,release_id):
         if user_agent.is_mobile:
             ipa_full_url = request.build_absolute_uri(curRelease.ipa_file.url)
             write_manifest(curRelease, ipa_full_url)
-            manifest_file_url = request.build_absolute_uri(curRelease.manifest_file.url)
-        else:
             manifest_file_url = request.build_absolute_uri(curRelease.manifest_file.url)
 
     elif platform == 'android':
