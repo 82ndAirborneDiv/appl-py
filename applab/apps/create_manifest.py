@@ -1,12 +1,16 @@
-from django.core.files import File
+import os
 from django.conf import settings
 from django.core.files.temp import NamedTemporaryFile
+from wsgiref.util import FileWrapper
+from django.shortcuts import HttpResponse, HttpResponseRedirect
 
-def write_manifest(app, ipa_full_url):
+def write_manifest_send(request, app, ipa_full_url):
 
     bundle_id = app.ios_project.bundle_id
     bundle_version = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
     app_title = app.ios_project.project_overview.project.title
+
+    # file = NamedTemporaryFile(mode='w+',buffering=200, suffix='.plist', delete='false')
 
     file = open('media/manifest.plist', 'w')
 
@@ -24,7 +28,7 @@ def write_manifest(app, ipa_full_url):
     file.write('                    	<string>software-package</string>\n')
     file.write('                    	<key>url</key>\n')
     file.write('                    	<string>'+ipa_full_url+'</string>\n')
-    file.write('                    <dict>\n')
+    file.write('                    </dict>\n')
     file.write('                    <dict>\n')
     file.write('                    	<key>kind</key>\n')
     file.write('                    	<string>display-image</string>\n')
@@ -57,5 +61,12 @@ def write_manifest(app, ipa_full_url):
 
     new_manifest = open('media/manifest.plist')
 
-    app.manifest_file.save('manifest.plist', File(new_manifest), save=False)
+    wrapper = FileWrapper(file)
+    response = HttpResponse('', status=302)
+    # response = HttpResponse(wrapper, content_type = 'application/xml')
+    response['Location'] = 'itms-services://?action=download-manifest&url='+request.build_absolute_uri()
+    print(response['Location'])
+    # response['Content-Disposition'] = 'attachment; filename=%s.plist' % os.path.basename(app.ios_project.project_overview.project.project_code_name)
+    return response
+
 
