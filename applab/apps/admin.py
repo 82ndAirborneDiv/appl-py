@@ -29,7 +29,6 @@ class ProjectOverviewAdmin(admin.ModelAdmin):
 
 
 admin.site.register(ProjectOverview, ProjectOverviewAdmin)
-admin.site.register(ProjectOverviewScreenshot)
 admin.site.register(IosProject)
 admin.site.register(IosRelease)
 admin.site.register(AndroidProject)
