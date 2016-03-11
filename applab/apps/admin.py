@@ -4,6 +4,8 @@ from django.contrib import admin
 from .models import Project, ProjectOverview, ProjectOverviewScreenshot
 from .models import IosProject, IosRelease, AndroidProject, AndroidRelease
 
+
+
 admin.site.register(Project)
 
 
@@ -15,9 +17,16 @@ class ProjectOverviewScreenshotInline(admin.TabularInline):
 
 class ProjectOverviewAdmin(admin.ModelAdmin):
     readonly_fields = ('date_published', 'icon_image')
-    fields = ('project', 'major_version', 'minor_version', 'date_published', 'description', 'icon_image', 'icon', 'source_code_link')
+    fieldsets = [
+        (None,              {'fields': ['project','date_published', 'description']}),
+        ('Version Info',   {'fields': ['major_version', 'minor_version']}),
+        ('Icon',   {'fields': ['icon_image', 'icon']}),
+        ('Source Code Link',   {'fields': ['source_code_link']})
+    ]
+
     list_filter = ['date_published', 'description']
     inlines = [ProjectOverviewScreenshotInline]
+
 
 admin.site.register(ProjectOverview, ProjectOverviewAdmin)
 admin.site.register(ProjectOverviewScreenshot)
