@@ -3,17 +3,22 @@ from django.conf import settings
 from django.core.files.temp import NamedTemporaryFile
 from wsgiref.util import FileWrapper
 from django.shortcuts import HttpResponse, HttpResponseRedirect
+import io,uuid,datetime
+
+
 
 def write_manifest_send(request, app, ipa_full_url):
-
+    tmpdirectory = 'media/temp/'
     bundle_id = app.ios_project.bundle_id
     bundle_version = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
     app_title = app.ios_project.project_overview.project.title
 
-    # file = NamedTemporaryFile(mode='w+',buffering=200, suffix='.plist', delete='false')
-
-    file = open('media/manifest.plist', 'w')
-
+    #file = NamedTemporaryFile(mode='w+',buffering=200, suffix='.plist', delete='false')
+    if not os.path.exists(tmpdirectory):
+        os.makedirs(tmpdirectory)
+    filename =  tmpdirectory +str(uuid.uuid1())+'_manifest.plist'
+    file = open( filename, 'w')
+    #file = io.StringIO()
     file.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     file.write('<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n')
     file.write('<plist version="1.0">\n')
@@ -59,14 +64,15 @@ def write_manifest_send(request, app, ipa_full_url):
     file.write('</plist>\n')
     file.close()
 
-    new_manifest = open('media/manifest.plist')
-
-    wrapper = FileWrapper(file)
-    response = HttpResponse('', status=302)
-    # response = HttpResponse(wrapper, content_type = 'application/xml')
-    response['Location'] = 'itms-services://?action=download-manifest&url='+request.build_absolute_uri()
-    print(response['Location'])
-    # response['Content-Disposition'] = 'attachment; filename=%s.plist' % os.path.basename(app.ios_project.project_overview.project.project_code_name)
-    return response
+    #new_manifest = open('media/manifest.plist')
+    print (filename )
+    #wrapper = FileWrapper(file)
+    #response = HttpResponse('', status=302)
+    response = HttpResponse(content_type= 'application/xml')
+    response['Location'] = 'itms-services://?action=download-manifest&url='+  filename
+    #print(response['Location'])
+    #response['Content-Disposition'] = 'attachment; filename=%s.plist' % os.path.basename(app.ios_project.project_overview.project.project_code_name)
+    response['Content-Disposition'] = 'attachment; filename=%s.plist' % filename
+    return  response
 
 
