@@ -8,7 +8,8 @@ def write_manifest(request, app, ipa_full_url):
     bundle_version = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
     app_title = app.ios_project.project_overview.project.title
     media_base_url = request.build_absolute_uri(settings.MEDIA_URL)
-
+    media_base_url = media_base_url.replace('http', 'https')
+    ipa_full_url = ipa_full_url.replace('http', 'https')
     file = open('media/manifest.plist', 'w')
 
     file.write('<?xml version="1.0" encoding="UTF-8"?>\n')
