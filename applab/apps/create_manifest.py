@@ -29,7 +29,7 @@ def write_manifest_send(request, app, ipa_full_url):
     file.write('                    	<string>software-package</string>\n')
     file.write('                    	<key>url</key>\n')
     file.write('                    	<string>'+ipa_full_url+'</string>\n')
-    file.write('                    <dict>\n')
+    file.write('                    </dict>\n')
     file.write('                    <dict>\n')
     file.write('                    	<key>kind</key>\n')
     file.write('                    	<string>display-image</string>\n')
