@@ -62,7 +62,7 @@ def app_release(request,platform,release_id):
         latestRelease = IosRelease.objects.filter(ios_project_id=curRelease.ios_project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
         if user_agent.is_mobile:
             ipa_full_url = request.build_absolute_uri(curRelease.ipa_file.url)
-            write_manifest(curRelease, ipa_full_url)
+            write_manifest(request, curRelease, ipa_full_url)
             manifest_file_url = request.build_absolute_uri(curRelease.manifest_file.url)
             manifest_file_url = manifest_file_url.replace('http', 'https')
 

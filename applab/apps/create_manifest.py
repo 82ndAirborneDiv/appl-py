@@ -2,11 +2,12 @@ from django.core.files import File
 from django.conf import settings
 from django.core.files.temp import NamedTemporaryFile
 
-def write_manifest(app, ipa_full_url):
+def write_manifest(request, app, ipa_full_url):
 
     bundle_id = app.ios_project.bundle_id
     bundle_version = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
     app_title = app.ios_project.project_overview.project.title
+    media_base_url = request.build_absolute_uri(settings.MEDIA_URL)
 
     file = open('media/manifest.plist', 'w')
 
@@ -29,13 +30,13 @@ def write_manifest(app, ipa_full_url):
     file.write('                    	<key>kind</key>\n')
     file.write('                    	<string>display-image</string>\n')
     file.write('                    	<key>url</key>\n')
-    file.write('                    	<string>'+settings.MEDIA_ROOT+'/iiu-app-icon.57x57.png</string>\n')
+    file.write('                    	<string>'+media_base_url+'iiu-app-icon.57x57.png</string>\n')
     file.write('                    </dict>\n')
     file.write('                    <dict>\n')
     file.write('                    	<key>kind</key>\n')
     file.write('                    	<string>full-size-image</string>\n')
     file.write('                    	<key>url</key>\n')
-    file.write('                    	<string>'+settings.MEDIA_ROOT+'/iiu-app-icon.512x512.png</string>\n')
+    file.write('                    	<string>'+media_base_url+'iiu-app-icon.512x512.png</string>\n')
     file.write('                	</dict>\n')
     file.write('                </array>\n')
     file.write('                <key>metadata</key>\n')
