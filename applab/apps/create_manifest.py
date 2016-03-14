@@ -7,7 +7,6 @@ def write_manifest(app, ipa_full_url):
     bundle_id = app.ios_project.bundle_id
     bundle_version = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
     app_title = app.ios_project.project_overview.project.title
-    ipa_full_url = ipa_full_url.replace('http', 'https')
 
     file = open('media/manifest.plist', 'w')
 
