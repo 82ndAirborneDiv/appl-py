@@ -1,8 +1,11 @@
 from django.core.files import File
 from django.conf import settings
+from wsgiref.util import FileWrapper
+from django.shortcuts import HttpResponse, HttpResponseRedirect
+
 from django.core.files.temp import NamedTemporaryFile
 
-def write_manifest(request, app, ipa_full_url):
+def write_manifest_send(request, app, ipa_full_url):
 
     bundle_id = app.ios_project.bundle_id
     bundle_version = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
@@ -57,7 +60,11 @@ def write_manifest(request, app, ipa_full_url):
     file.write('</plist>\n')
     file.close()
 
-    new_manifest = open('media/manifest.plist')
+    # new_manifest = open('media/manifest.plist')
 
-    app.manifest_file.save('manifest.plist', File(new_manifest), save=False)
+    # app.manifest_file.save('manifest.plist', File(new_manifest), save=False)
+    # wrapper = FileWrapper(file)
+    response = HttpResponse('', status=302)
 
+    response['Location'] = 'itms-services://?action=download-manifest&url='+media_base_url+'manifest.plist'
+    return response

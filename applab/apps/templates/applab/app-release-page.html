@@ -1,6 +1,5 @@
 {% extends 'applab/applab_base.html' %}
 {% load staticfiles %}
-{% load user_agents %}
 {% block content %}
 
    <div class="app-display">
@@ -16,11 +15,7 @@
                             <h1 class="titlefonts">{{appDetail.title}} <span class="icon-{{appDetail.platform}}"></span></h1>
                             <p class="version-text">Version {{ appDetail.releaseVersion }}
                                 <br><i>Updated: {{ appDetail.currentRelease.timestamp}}</i></p>
-                            {% if request|is_pc or appDetail.platform == 'android' %}
-                                <a href="{% url 'app_download' appDetail.platform appDetail.currentRelease.id %}" role="button" class="btn btn-success dl-btn">Download</a>
-                            {% else %}
-                                <a href="{{ appDetail.manifestUrl }}" role="button" class="btn btn-success dl-btn">Download</a>
-                            {% endif %}
+                            <a href="{% url 'app_download' appDetail.platform appDetail.currentRelease.id %}" role="button" class="btn btn-success dl-btn">Download</a>
                             {% if appDetail.overview.source_code_link %}
                                 <a href="{{appDetail.overview.source_code_link}}" target="_blank" role="button" class="btn btn-default gh-btn">View Source</a>
                             {% endif %}
