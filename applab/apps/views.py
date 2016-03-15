@@ -100,23 +100,23 @@ def platform_page(request,platform,sortfield=None):
     else:
         sortfield = '-timestamp'
 
-    if platform == 'ios':
-       apps = IosRelease.objects.select_related('ios_project__project_overview__project').exclude(ios_project__project_overview__project__is_archived = True).order_by(sortfield)
-       for app in apps:
+    if str.lower(platform) == "ios":
+       platform_app['apps'] = IosRelease.objects.select_related('ios_project__project_overview__project').exclude(ios_project__project_overview__project__is_archived = True).order_by(sortfield)
+       for app in platform_app['apps']:
            app.title = app.ios_project.project_overview.project.title
            app.icon_url =  app.ios_project.project_overview.icon.url
            app.description = app.ios_project.project_overview.description
            app.release_id = app.id
            app.releaseVersion = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
-    elif platform == 'android':
-       apps = AndroidRelease.objects.select_related('android_project__project_overview__project').exclude(android_project__project_overview__project__is_archived = True).order_by(sortfield)
-       for app in apps:
+    elif str.lower(platform) == 'android':
+       platform_app['apps'] = AndroidRelease.objects.select_related('android_project__project_overview__project').exclude(android_project__project_overview__project__is_archived = True).order_by(sortfield)
+       for app in platform_app['apps']:
            app.title = app.android_project.project_overview.project.title
            app.icon_url =  app.android_project.project_overview.icon.url
            app.description = app.android_project.project_overview.description
            app.release_id = app.id
            app.releaseVersion = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
-    platform_app['apps'] = apps
+    #platform_app['apps'] = apps
     platform_app['platform'] = platform
 
     return render(request,'applab/platform-page.html/', {

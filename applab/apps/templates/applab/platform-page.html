@@ -34,8 +34,9 @@
     <div class="row">
                 <div class="col-lg-12 new-release-content">
                     <div class="row">
+                        {% if platform_app.apps %}
                          {% for app in platform_app.apps %}
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                             <div class="panel panel-default">
                               <div class="panel-body">
                                 <a href="{% url 'app_release_page' platform_app.platform app.id %}"><img src="{{ app.icon_url }}" width="512" height="512" class="img-responsive"></a>
@@ -45,8 +46,17 @@
                                 <!--<div class="desc-box">{{ app.description }}</div>-->
                               </div>
                             </div>
-                        </div>
+                         </div>
                         {% endfor %}
+                       {% else %}
+                           <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="panel panel-default">
+                              <div class="panel-body">
+                                  <p>Sorry, no apps available for platform: "{{platform_app.platform}}"</p>
+                              </div>
+                            </div>
+                         </div>
+                       {% endif %}
                     </div>
                 </div>
             </div>
