@@ -67,8 +67,9 @@ h6 {
 .navbar {
     border: 1px solid transparent;
     margin-bottom: 30px;
-    min-height: 75px;
-    padding-top: 5px;
+    min-height: 88px;
+    line-height: 88px;
+    padding-top: 0px;
     -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.09);
 -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.09);
 box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.09);
@@ -238,7 +239,7 @@ box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.09);
 }
 @media (min-width: 1200px) {
     .container {
-        width: 1080px;
+        width: 1130px;
     }
 }
 /*.navbar-brand {
