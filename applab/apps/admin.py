@@ -5,7 +5,6 @@ from .models import Project, ProjectOverview, ProjectOverviewScreenshot
 from .models import IosProject, IosRelease, AndroidProject, AndroidRelease
 
 
-
 admin.site.register(Project)
 
 
@@ -18,19 +17,32 @@ class ProjectOverviewScreenshotInline(admin.TabularInline):
 class ProjectOverviewAdmin(admin.ModelAdmin):
     readonly_fields = ('date_published', 'icon_image')
     fieldsets = [
-        (None,              {'fields': ['project','date_published', 'description']}),
+        (None,              {'fields': ['project', 'date_published', 'description']}),
         ('Version Info',   {'fields': ['major_version', 'minor_version']}),
+        ('Source Code Link',   {'fields': ['source_code_link']}),
         ('Icon',   {'fields': ['icon_image', 'icon']}),
-        ('Source Code Link',   {'fields': ['source_code_link']})
     ]
-
     list_filter = ['date_published', 'description']
     inlines = [ProjectOverviewScreenshotInline]
 
 
+class IosReleaseAdmin(admin.ModelAdmin):
+    model = IosRelease
+
+
+class IosReleaseInline(admin.TabularInline):
+    model = IosRelease
+    fields = ['major_version', 'minor_version','point_version', 'build_version']
+    #show_change_link = True
+
+
+class IosProjectAdmin(admin.ModelAdmin):
+    inlines = [IosReleaseInline]
+
+
 admin.site.register(ProjectOverview, ProjectOverviewAdmin)
-admin.site.register(IosProject)
-admin.site.register(IosRelease)
+admin.site.register(IosProject, IosProjectAdmin)
+admin.site.register(IosRelease, IosReleaseAdmin)
 admin.site.register(AndroidProject)
 admin.site.register(AndroidRelease)
 

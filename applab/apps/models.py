@@ -17,8 +17,7 @@ class Project(models.Model):
 
 
 def overview_icon_upload_path(instance, filename):
-    date_created = str(localtime(instance.date_published).strftime('%Y-%m-%d_%I-%M_%p'))
-    return os.path.join(instance.project.project_code_name, date_created, "icons", filename)
+    return os.path.join(instance.get_overview_path(), "icons", filename)
 
 
 class ProjectOverview(models.Model):
@@ -34,17 +33,22 @@ class ProjectOverview(models.Model):
     icon = models.ImageField(upload_to=overview_icon_upload_path)
     source_code_link = models.URLField()
 
+    def get_version_string(self):
+        return "{}.{}".format(self.major_version, self.minor_version)
+
+    def get_overview_path(self):
+        return os.path.join(self.project.project_code_name, "overviews", self.get_version_string())
+
     def icon_image(self):
         return mark_safe('<img src="%s" style="max-height: 100px; max-width: 100px;" />' % self.icon.url)
     icon_image.allow_tags = True
 
     def __str__(self):
-        return '%s %d.%d' % (self.project.title, self.major_version, self.minor_version)
+        return '%s %s' % (self.project.title, self.get_version_string())
 
 
 def overview_screenshot_upload_path(instance, filename):
-    date_created = str(localtime(instance.project_overview.date_published).strftime('%Y-%m-%d_%I-%M_%p'))
-    return os.path.join(instance.project_overview.project.project_code_name, date_created, "screenshots", filename)
+    return os.path.join(instance.project_overview.get_overview_path(), "screenshots", filename)
 
 
 class ProjectOverviewScreenshot(models.Model):
@@ -90,14 +94,15 @@ class Release(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     is_featured_release = models.BooleanField(default=False)
 
-    def __str__(self):
-        return '%d.%d.%d.%d' % (self.major_version, self.minor_version, self.point_version, self.build_version)
+    # def __str__(self):
+    #     return '%d.%d.%d.%d' % (self.major_version, self.minor_version, self.point_version, self.build_version)
 
 
 def ipa_upload_path(instance, filename):
     version_path = '%d.%d.%d.%d' % (instance.major_version, instance.minor_version, instance.point_version, instance.build_version)
     platform_path = 'ios'
-    return os.path.join(instance.ios_project.project_overview.project.project_code_name, platform_path, version_path, filename)
+    return os.path.join(instance.ios_project.project_overview.project.project_code_name, "releases", platform_path,
+                        version_path, filename)
 
 
 class IosRelease(Release):
@@ -106,13 +111,15 @@ class IosRelease(Release):
     manifest_file = models.FileField(upload_to=ipa_upload_path)
 
     def __str__(self):
-        return '%s %d.%d.%d.%d' % (self.ios_project.project_overview.project.title, self.major_version, self.minor_version, self.point_version, self.build_version)
+        return '%s %d.%d.%d.%d' % (self.ios_project.project_overview.project.title, self.major_version,
+                                   self.minor_version, self.point_version, self.build_version)
 
 
 def apk_upload_path(instance, filename):
     version_path = '%d.%d.%d.%d' % (instance.major_version, instance.minor_version, instance.point_version, instance.build_version)
     platform_path = 'android'
-    return os.path.join(instance.android_project.project_overview.project.project_code_name, platform_path, version_path, filename)
+    return os.path.join(instance.android_project.project_overview.project.project_code_name, "releases", platform_path,
+                        version_path, filename)
 
 
 class AndroidRelease(Release):
@@ -120,7 +127,8 @@ class AndroidRelease(Release):
     apk_file = models.FileField(upload_to=apk_upload_path)
 
     def __str__(self):
-        return '%s %d.%d.%d.%d' % (self.android_project.project_overview.project.title, self.major_version, self.minor_version, self.point_version, self.build_version)
+        return '%s %d.%d.%d.%d' % (self.android_project.project_overview.project.title, self.major_version,
+                                   self.minor_version, self.point_version, self.build_version)
 
 
 
