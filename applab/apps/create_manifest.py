@@ -13,7 +13,6 @@ def write_manifest_send(request, app, ipa_full_url):
     media_base_url = media_base_url.replace('http', 'https')
     ipa_full_url = ipa_full_url.replace('http', 'https')
     base_url = media_base_url.replace('/media/', '/')
-    base_url = base_url.replace('http', 'https')
 
     if not os.path.exists(tmp_directory):
         os.makedirs(tmp_directory)
