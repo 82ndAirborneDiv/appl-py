@@ -10,11 +10,11 @@ def write_manifest_send(request, app, ipa_full_url):
     bundle_version = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
     app_title = app.ios_project.project_overview.project.title
     media_base_url = request.build_absolute_uri(settings.MEDIA_URL)
-    media_base_url = media_base_url.replace('/media/', '/')
     media_base_url = media_base_url.replace('http', 'https')
     ipa_full_url = ipa_full_url.replace('http', 'https')
+    base_url = media_base_url.replace('/media/', '/')
+    base_url = base_url.replace('http', 'https')
 
-    
     if not os.path.exists(tmp_directory):
         os.makedirs(tmp_directory)
     file_name = tmp_directory + str(uuid.uuid1())+'_manifest.plist'
@@ -68,5 +68,5 @@ def write_manifest_send(request, app, ipa_full_url):
 
     response = HttpResponse('', status=302, content_type='application/xml')
     # response = HttpResponse(content_type='application/xml')
-    response['Location'] = 'itms-services://?action=download-manifest&url='+media_base_url+file_name
+    response['Location'] = 'itms-services://?action=download-manifest&url='+base_url+file_name
     return response
