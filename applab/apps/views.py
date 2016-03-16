@@ -65,7 +65,8 @@ def app_release(request,platform,release_id):
         overview = curRelease.android_project.project_overview
         previousReleases = AndroidRelease.objects.filter(android_project_id=curRelease.android_project_id).exclude(id=curRelease.id).order_by('-major_version','-minor_version','-point_version','-build_version')[:historyLimit+1]
         latestRelease = AndroidRelease.objects.filter(android_project_id=curRelease.android_project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
-    screenshots = ProjectOverviewScreenshot.objects.filter(project_overview = overview.project_id)
+    #screenshots = ProjectOverviewScreenshot.objects.filter(project_overview = overview.project_id)
+    screenshots = ProjectOverviewScreenshot.objects.filter(project_overview = overview.id)
     appDetail = {
         'overview' : overview,
         'currentRelease' : curRelease,
