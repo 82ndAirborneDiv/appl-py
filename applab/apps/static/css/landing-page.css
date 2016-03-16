@@ -210,10 +210,15 @@ box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.09);
 }
 .navbar-nav > li > a {
     line-height:52px;
-    font-size:12px;
-    font-family: Verdana, Helvetica, Arial, sans-serif;
-    color:#808080;
+    font-size:13px;
+    /*font-family: Verdana, Helvetica, Arial, sans-serif;*/
+    font-family: 'Open Sans', HelveticaNeue, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color:#808080 !important;
     font-weight:500;
+    font-stretch : normal;
+    font-style :normal;
+    font-variant : normal;
+
 }
 .navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse {
     max-height: 640px;
@@ -285,7 +290,7 @@ box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.09);
 
     }
 }
-}
+
 
 @media(max-width:767px) {
     .banner h2 {
