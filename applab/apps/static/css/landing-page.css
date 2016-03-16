@@ -398,3 +398,9 @@ p.copyright {
     right: 0;
     left: auto;
 }
+
+.contact-text {
+    margin-top: 0px;
+    color: #919191;
+    font-size: 14px;
+}
