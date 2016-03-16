@@ -20,7 +20,7 @@ def home_page(request):
             release = AndroidRelease.objects.select_related('android_project__project_overview').filter(android_project__project_overview_id = app.id, is_featured_release=True).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
             one_app['platform'] = 'android'
             one_app['releaseDate'] = release.timestamp
-            one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.major_version,release.point_version,release.build_version)
+            one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.minor_version,release.point_version,release.build_version)
             one_app['id'] = release.id
             apps_to_display.append(copy.copy(one_app))
         except IndexError:
