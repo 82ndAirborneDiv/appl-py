@@ -74,6 +74,15 @@ h6 {
 -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.09);
 box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.09);*/
 }
+
+
+.navbar-default .navbar-nav>li>a:hover,
+.navbar-default .navbar-nav>li>a:focus
+{
+    list-style-position: outside;
+    border-bottom: 2px solid #2d5c88;
+}
+
 .request-code {
 	font-size:12px;
 	font-style:italic;
@@ -254,6 +263,7 @@ box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.09);*/
     font-stretch : normal;
     font-style :normal;
     font-variant : normal;
+    padding-bottom: 18px;
 
 }
 .navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse {
