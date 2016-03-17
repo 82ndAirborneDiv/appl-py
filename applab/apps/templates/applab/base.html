@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Informatics Innovation Unit - AppLab</title>
+    <title>Informatics Innovation Unit - App Lab</title>
    
     <!-- Bootstrap Core CSS -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
@@ -64,10 +64,10 @@
                         <a href="http://lvsiiuprlorgdev.lab.local/index.php/iiu-portfolio/">Portfolio</a>
                     </li>
                     <li>
-                        <a href="{% url 'home_page' %}">AppLab</a>
+                        <a href="{% url 'home_page' %}">App Lab</a>
                     </li>
                     <li>
-                        <a href="http://lvsiiuprlorgdev.lab.local/index.php/iiu-articles/">Articles</a>
+                        <a href="http://lvsiiuprlorgdev.lab.local/index.php/iiu-articles/">Blog</a>
                     </li>
                      <li>
                     <li>
@@ -129,43 +129,35 @@
             </div>
        </div>
   </div>
-
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                    <h4>MISCELLANEOUS</h4><br>
+                    <a href="#">Disclaimer</a><br>
+                    <a href="#">Code of Conduct</a><br>
+                    <a href="#">Accessibility</a><br>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                    <h4>CONTACT US</h4><br>
+                    Please contact us at<br>
+                    <a href="mailto:informaticslab@cdc.gov">informaticslab@cdc.gov</a>.
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" align="right">
+                    <img src="{% static 'img/HHS-Logo2.png' %}" width="220">
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer -->
+    <footer class="footer2">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <!--<ul class="list-inline">
-                        <li>
-                            <a href="#">Home</a>
-                        </li>
-                        <li class="footer-menu-divider">&sdot;</li>
-                        <li>
-                            <a href="#about">About</a>
-                        </li>
-                        <li class="footer-menu-divider">&sdot;</li>
-                        <li>
-                            <a href="#services">Services</a>
-                        </li>
-                        <li class="footer-menu-divider">&sdot;</li>
-                        <li>
-                            <a href="#contact">Contact</a>
-                        </li>
-                    </ul>-->
-                    <div class="row">
-                        <div class="col-lg-4">
-                             <p>Center for Surveillance, Epidemiology, and Laboratory Services <br> Office of Public Health Scientific Services  <br>
-                                Centers for Disease Control and Prevention <br> Department of Health and Human Services</p>
-                            <br>
-                            <p><span style="font-size: 15px;">Please click <a href="#">here</a> to view our <a href="#">code of conduct</a></span></p>
-                        </div>
-                        <div class="col-lg-4"></div>
-                        <div class="col-lg-4">
-                                <h4 class="contact-text">CONTACT US</h4>
-                                <div>Please contact us at <a mailto="informaticslab@cdc.gov">informaticslab@cdc.gov</a>.</div>
-                                <div><img class="img-responsive" src="http://lvsiiuprlorgdev.lab.local/wp-content/uploads/2016/03/HHS-Logo2.png" width="250" height="45" ></div>
-                        </div>
-                    </div>
+                    <p>Center for Surveillance, Epidemiology, and Laboratory Services | Office of Public Health Scientific Services | <br>
+Centers for Disease Control and Prevention | Department of Health and Human Services</p>
+                </div>
             </div>
         </div>
     </footer>
