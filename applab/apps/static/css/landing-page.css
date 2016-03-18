@@ -75,7 +75,10 @@ h6 {
 box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.09);*/
 }
 
-
+.applab-active {
+    list-style-position: outside;
+    border-bottom: 2px solid #2d5c88;
+}
 .navbar-default .navbar-nav>li>a:hover,
 .navbar-default .navbar-nav>li>a:focus
 {
