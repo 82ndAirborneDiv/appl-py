@@ -25,7 +25,21 @@ class ProjectOverview(models.Model):
     as it is a foreign key to the ProjectScreenshot object. The attributes of this object may evolve over time and are
     separated from the Project object
     """
+    NO_PLATFORM = ''
+    IOS = 'ios'
+    ANDROID = 'and'
+    WINDOWS_MOBILE = 'win'
+    MULTIPLE_PLATFORM = 'mlp'
+    PLATFORM_CHOICES = (
+        (NO_PLATFORM, 'No Platform'),
+        (IOS, 'iOS'),
+        (ANDROID, 'Android'),
+        (WINDOWS_MOBILE, 'Windows Mobile'),
+        (MULTIPLE_PLATFORM, 'Multi-Platform')
+    )
+
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    platform = models.CharField(max_length=3, choices=PLATFORM_CHOICES, default=NO_PLATFORM)
     major_version = models.PositiveSmallIntegerField()
     minor_version = models.PositiveSmallIntegerField()
     date_published = models.DateTimeField(auto_now=True)
@@ -39,12 +53,30 @@ class ProjectOverview(models.Model):
     def get_overview_path(self):
         return os.path.join(self.project.project_code_name, "overviews", self.get_version_string())
 
+    def is_ios(self):
+        return self.platform in self.IOS
+
+    def is_android(self):
+        return self.platform in self.ANDROID
+
+    def is_windows(self):
+        return self.platform in self.WINDOWS_MOBILE
+
+    def is_multi_platform(self):
+        return self.platform in self.MULTIPLE_PLATFORM
+
     def icon_image(self):
         return mark_safe('<img src="%s" style="max-height: 100px; max-width: 100px;" />' % self.icon.url)
     icon_image.allow_tags = True
 
+    def platform_readable_name(self):
+        for choice in self.PLATFORM_CHOICES:
+            if choice[0] == self.platform:
+                return choice[1]
+        return ''
+
     def __str__(self):
-        return '%s %s' % (self.project.title, self.get_version_string())
+        return '%s, %s, %s' % (self.project.title, self.platform_readable_name(), self.get_version_string())
 
 
 def overview_screenshot_upload_path(instance, filename):
