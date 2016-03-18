@@ -25,7 +25,7 @@
             </div>
               {% if appDetail.releaseVersion != appDetail.latestVersion %}
                 <div class="row">
-                    <div class="col-lg-12 late-version">
+                    <div class="col-lg-12 late-version alert-danger">
 
                             <p>This app is out of date. To view the latest version please <a href="{% url 'app_release_page' appDetail.platform appDetail.latestRelease.id %}">click here</a>.</p>
 
