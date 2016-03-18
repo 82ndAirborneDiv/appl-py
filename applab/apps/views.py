@@ -17,7 +17,7 @@ def home_page(request):
         one_app['description'] = app.description
         one_app['icon'] = app.icon
         try:
-            release = AndroidRelease.objects.select_related('android_project__project_overview').filter(android_project__project_overview_id = app.id, is_featured_release=True).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+            release = AndroidRelease.objects.select_related('android_project__project_overview').filter(android_project__project_overview_id = app.id, is_featured_release=True, is_archived=False).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
             one_app['platform'] = 'android'
             one_app['releaseDate'] = release.timestamp
             one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.minor_version,release.point_version,release.build_version)
@@ -26,7 +26,7 @@ def home_page(request):
         except IndexError:
             pass
         try:
-            release =  IosRelease.objects.select_related('ios_project__project_overview').filter(ios_project__project_overview_id=app.id,is_featured_release=True).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+            release =  IosRelease.objects.select_related('ios_project__project_overview').filter(ios_project__project_overview_id=app.id,is_featured_release=True, is_archived=False).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
             one_app['platform'] = 'ios'
             one_app['releaseDate'] = release.timestamp
             one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.minor_version,release.point_version,release.build_version)
@@ -55,16 +55,16 @@ def app_release(request,platform,release_id):
     # appTitle = ' '.join(project_title.split('-')[1:-4])
     # appRelease = project_title.rsplit('-')[-4:]
     if platform == 'ios':
-        curRelease = IosRelease.objects.select_related('ios_project__project_overview__project').filter(id=release_id)[0]
+        curRelease = IosRelease.objects.select_related('ios_project__project_overview__project').filter(id=release_id, is_archived=False)[0]
         overview = curRelease.ios_project.project_overview
         previousReleases = IosRelease.objects.filter(ios_project_id=curRelease.ios_project_id).exclude(id=curRelease.id).order_by('-major_version','-minor_version','-point_version','-build_version')[:historyLimit+1]
-        latestRelease = IosRelease.objects.filter(ios_project_id=curRelease.ios_project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+        latestRelease = IosRelease.objects.filter(ios_project_id=curRelease.ios_project_id, is_archived=False).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
 
     elif platform == 'android':
-        curRelease = AndroidRelease.objects.select_related('android_project__project_overview__project').filter(id=release_id)[0]
+        curRelease = AndroidRelease.objects.select_related('android_project__project_overview__project').filter(id=release_id, is_archived=False)[0]
         overview = curRelease.android_project.project_overview
         previousReleases = AndroidRelease.objects.filter(android_project_id=curRelease.android_project_id).exclude(id=curRelease.id).order_by('-major_version','-minor_version','-point_version','-build_version')[:historyLimit+1]
-        latestRelease = AndroidRelease.objects.filter(android_project_id=curRelease.android_project_id).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+        latestRelease = AndroidRelease.objects.filter(android_project_id=curRelease.android_project_id, is_archived=False).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
     #screenshots = ProjectOverviewScreenshot.objects.filter(project_overview = overview.project_id)
     screenshots = ProjectOverviewScreenshot.objects.filter(project_overview = overview.id)
     appDetail = {
@@ -89,7 +89,7 @@ def app_release(request,platform,release_id):
 @login_required()
 def platform_page(request,platform,sortfield=None):
     request.session['platform'] = platform.lower()
-    platform_app = {}
+
     if sortfield:
         sortfield = sortfield.lower()
         if sortfield =='sortname':
@@ -101,24 +101,34 @@ def platform_page(request,platform,sortfield=None):
     else:
         sortfield = '-timestamp'
 
-    if str.lower(platform) == "ios":
-       platform_app['apps'] = IosRelease.objects.select_related('ios_project__project_overview__project').exclude(ios_project__project_overview__project__is_archived = True).order_by(sortfield)
-       for app in platform_app['apps']:
-           app.title = app.ios_project.project_overview.project.title
-           app.icon_url =  app.ios_project.project_overview.icon.url
-           app.description = app.ios_project.project_overview.description
-           app.release_id = app.id
-           app.releaseVersion = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
-    elif str.lower(platform) == 'android':
-       platform_app['apps'] = AndroidRelease.objects.select_related('android_project__project_overview__project').exclude(android_project__project_overview__project__is_archived = True).order_by(sortfield)
-       for app in platform_app['apps']:
-           app.title = app.android_project.project_overview.project.title
-           app.icon_url =  app.android_project.project_overview.icon.url
-           app.description = app.android_project.project_overview.description
-           app.release_id = app.id
-           app.releaseVersion = '{0}.{1}.{2}.{3}'.format(app.major_version,app.minor_version,app.point_version,app.build_version)
-    #platform_app['apps'] = apps
-    platform_app['platform'] = platform
+    platform_app = {'platform' : platform, 'apps': []}
+
+    avail_apps = ProjectOverview.objects.select_related('project').filter(project__in=Project.objects.filter(is_archived=False))
+    for app in avail_apps:
+        one_app = {}
+        one_app['title'] = app.project.title
+        one_app['description'] = app.description
+        one_app['icon'] = app.icon
+        if str.lower(platform) == 'android':
+            try:
+                release = AndroidRelease.objects.select_related('android_project__project_overview').filter(android_project__project_overview_id = app.id, is_archived=False).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+                one_app['platform'] = 'android'
+                one_app['releaseDate'] = release.timestamp
+                one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.minor_version,release.point_version,release.build_version)
+                one_app['id'] = release.id
+                platform_app['apps'].append(copy.copy(one_app))
+            except IndexError:
+                pass
+        elif str.lower(platform) == 'ios':
+            try:
+                release =  IosRelease.objects.select_related('ios_project__project_overview').filter(ios_project__project_overview_id=app.id, is_archived=False).order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+                one_app['platform'] = 'ios'
+                one_app['releaseDate'] = release.timestamp
+                one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.minor_version,release.point_version,release.build_version)
+                one_app['id'] = release.id
+                platform_app['apps'].append(copy.copy(one_app))
+            except IndexError:
+                pass
 
     return render(request,'applab/platform-page.html/', {
         'platform_app' : platform_app
