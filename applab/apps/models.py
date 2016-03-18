@@ -108,7 +108,6 @@ def ipa_upload_path(instance, filename):
 class IosRelease(Release):
     ios_project = models.ForeignKey(IosProject, on_delete=models.CASCADE)
     ipa_file = models.FileField(upload_to=ipa_upload_path)
-    manifest_file = models.FileField(upload_to=ipa_upload_path)
 
     def __str__(self):
         return '%s %d.%d.%d.%d' % (self.ios_project.project_overview.project.title, self.major_version,
