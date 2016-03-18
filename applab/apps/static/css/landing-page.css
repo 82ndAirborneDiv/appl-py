@@ -452,3 +452,12 @@ p.copyright {
     font-size: 14px;
 }
 
+.panel-info {
+    border-color: #337ab7;
+}
+
+.panel-info>.panel-heading {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
