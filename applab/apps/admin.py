@@ -17,12 +17,12 @@ class ProjectOverviewScreenshotInline(admin.TabularInline):
 class ProjectOverviewAdmin(admin.ModelAdmin):
     readonly_fields = ('date_published', 'icon_image')
     fieldsets = [
-        (None,              {'fields': ['project', 'date_published', 'description']}),
+        (None,              {'fields': ['project', 'platform', 'date_published', 'description']}),
         ('Version Info',   {'fields': ['major_version', 'minor_version']}),
         ('Source Code Link',   {'fields': ['source_code_link']}),
         ('Icon',   {'fields': ['icon_image', 'icon']}),
     ]
-    list_filter = ['date_published', 'description']
+    list_filter = ['date_published', 'platform']
     inlines = [ProjectOverviewScreenshotInline]
 
 
