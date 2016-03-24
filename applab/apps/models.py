@@ -99,19 +99,20 @@ class ProjectOverviewScreenshot(models.Model):
 
 class IosProject(models.Model):
     project_overview = models.ForeignKey(ProjectOverview, on_delete=models.CASCADE)
-    bundle_id = models.CharField(max_length=50)
+    bundle_id = models.CharField(max_length=100, default="")
     apple_app_store_link = models.URLField(blank=True, max_length=200, default="")
 
     def __str__(self):
-        return '%s' % self.project_overview.project.title
+        return '%s, %s' % (self.bundle_id, self.project_overview)
 
 
 class AndroidProject(models.Model):
     project_overview = models.ForeignKey(ProjectOverview, on_delete=models.CASCADE)
+    application_id = models.CharField(max_length=100, default="")
     google_play_link = models.URLField(blank=True, max_length=200, default="")
 
     def __str__(self):
-        return '%s' % self.project_overview.project.title
+        return '%s, %s' % (self.application_id, self.project_overview)
 
 
 class Release(models.Model):
