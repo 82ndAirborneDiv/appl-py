@@ -24,8 +24,8 @@
                 </div>
             </div>
               {% if appDetail.releaseVersion != appDetail.latestVersion %}
-                <div class="row">
-                    <div class="col-lg-12 late-version alert-danger">
+                <div class="row" style="padding-top:5px;">
+                    <div class="col-lg-12 alert alert-warning" role="alert">
 
                             <p>This app is out of date. To view the latest version please <a href="{% url 'app_release_page' appDetail.platform appDetail.latestRelease.id %}">click here</a>.</p>
 
@@ -197,12 +197,12 @@
                             <div class="row">
                                 {% for previousRelease in appDetail.previousReleases %}
                                   <div class="col-lg-4 col-md-4">
-                                    {% if previousRelease.is_archived == False %}
+
                                       <strong><a href="{% url 'app_release_page' appDetail.platform previousRelease.id %}">{{appDetail.title}}</a></strong><br>
                                         <span class="version-released">Release {{previousRelease.major_version}}.{{previousRelease.minor_version}}.{{previousRelease.point_version}}.{{previousRelease.build_version}}<br>
                                         Released: {{previousRelease.timestamp}}</span>
                                         <br><br>
-                                    {% endif %}
+
                                   </div>
                                 {% endfor %}
                               </div>
