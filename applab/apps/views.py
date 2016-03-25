@@ -5,6 +5,7 @@ from .models import Project, ProjectOverview,IosProject,IosRelease,AndroidProjec
 from wsgiref.util import FileWrapper
 from django_user_agents.utils import get_user_agent
 from .create_manifest import write_manifest_send
+from operator import itemgetter
 
 @login_required()
 def home_page(request):
@@ -19,7 +20,7 @@ def home_page(request):
         one_app['title'] = app.title
         try:
             release = AndroidRelease.objects.filter(android_project__project_overview__project_id = app.id, is_archived=False, is_featured_release=True)\
-            .order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+                .order_by('-major_version','-minor_version','-point_version','-build_version')[0]
             one_app['platform'] = 'android'
             one_app['releaseDate'] = release.timestamp
             one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.minor_version,release.point_version,release.build_version)
@@ -31,7 +32,7 @@ def home_page(request):
             pass
         try:
             release = IosRelease.objects.filter(ios_project__project_overview__project_id = app.id, is_archived=False, is_featured_release=True)\
-            .order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+                .order_by('-major_version','-minor_version','-point_version','-build_version')[0]
             one_app['platform'] = 'ios'
             one_app['releaseDate'] = release.timestamp
             one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.minor_version,release.point_version,release.build_version)
@@ -67,8 +68,8 @@ def app_release(request,platform,release_id):
 
         # previous releases should consider all releases for overall Project
         previousReleases = IosRelease.objects.select_related('ios_project__project_overview__project')\
-                .filter(is_archived=False, ios_project__project_overview__project_id = curRelease.ios_project.project_overview.project.id)\
-                .exclude(id=curRelease.id).order_by('-major_version','-minor_version','-point_version','-build_version')[:historyLimit+1]
+            .filter(is_archived=False, ios_project__project_overview__project_id = curRelease.ios_project.project_overview.project.id)\
+            .exclude(id=curRelease.id).order_by('-major_version','-minor_version','-point_version','-build_version')[:historyLimit+1]
 
         # get latest, non-archived, release, NOT filtered by featured release
         latestRelease = IosRelease.objects.filter(ios_project__project_overview__project_id = overview.project.id, is_archived=False)\
@@ -80,8 +81,8 @@ def app_release(request,platform,release_id):
 
         # previous releases should consider all releases for overall Project
         previousReleases = AndroidRelease.objects.select_related('android_project__project_overview__project')\
-                .filter(is_archived=False, android_project__project_overview__project_id = curRelease.android_project.project_overview.project.id)\
-                .exclude(id=curRelease.id).order_by('-major_version','-minor_version','-point_version','-build_version')[:historyLimit+1]
+            .filter(is_archived=False, android_project__project_overview__project_id = curRelease.android_project.project_overview.project.id)\
+            .exclude(id=curRelease.id).order_by('-major_version','-minor_version','-point_version','-build_version')[:historyLimit+1]
 
         # get latest, non-archived, release, NOT filtered by featured release
         latestRelease = AndroidRelease.objects.filter(android_project__project_overview__project_id = overview.project.id, is_archived=False)\
@@ -103,6 +104,10 @@ def app_release(request,platform,release_id):
         'releaseVersion': '{0}.{1}.{2}.{3}'.format(curRelease.major_version,curRelease.minor_version,curRelease.point_version,curRelease.build_version),
         'latestVersion' : '{0}.{1}.{2}.{3}'.format(latestRelease.major_version,latestRelease.minor_version,latestRelease.point_version,latestRelease.build_version),
     }
+    if str.lower(platform) == 'android':
+        appDetail['app_identifier'] = curRelease.android_project.application_id
+    elif str.lower(platform) == 'ios':
+        appDetail ['app_identifier'] = curRelease.ios_project.bundle_id
     #appDetail.appRelease = '{0}.{1}.{2}.{3}'.format(appDetail.major_version,appDetail.minor_version,appDetail.point_version,appDetail.build_version)
     return render(request,'applab/app-release-page.html/',{
         'appDetail' : appDetail,
@@ -113,17 +118,6 @@ def app_release(request,platform,release_id):
 @login_required()
 def platform_page(request,platform,sortfield=None):
     request.session['platform'] = platform.lower()
-
-    if sortfield:
-        sortfield = sortfield.lower()
-        if sortfield =='sortname':
-            sortfield = platform + '_project__project_overview__project__title'
-        if sortfield =='sortnamedesc':
-            sortfield = '-'+ platform + '_project__project_overview__project__title'
-        elif sortfield == 'sortreleasedate':
-            sortfield = '-timestamp'
-    else:
-        sortfield = '-timestamp'
 
     platform_app = {'platform' : platform, 'apps': []}
 
@@ -138,7 +132,7 @@ def platform_page(request,platform,sortfield=None):
             try:
                 # Select latest release, not filtered_by_featured for current project and append to dictionary to pass to template.
                 release = AndroidRelease.objects.filter(android_project__project_overview__project_id = app.id, is_archived=False)\
-                .order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+                    .order_by('-major_version','-minor_version','-point_version','-build_version')[0]
                 one_app['platform'] = 'android'
                 one_app['releaseDate'] = release.timestamp
                 one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.minor_version,release.point_version,release.build_version)
@@ -152,7 +146,7 @@ def platform_page(request,platform,sortfield=None):
             try:
                 # Select latest release, not filtered_by_featured for current project and append to dictionary to pass to template.
                 release = IosRelease.objects.filter(ios_project__project_overview__project_id = app.id, is_archived=False)\
-                .order_by('-major_version','-minor_version','-point_version','-build_version')[0]
+                    .order_by('-major_version','-minor_version','-point_version','-build_version')[0]
                 one_app['platform'] = 'ios'
                 one_app['releaseDate'] = release.timestamp
                 one_app['releaseVersion'] = '{0}.{1}.{2}.{3}'.format(release.major_version,release.minor_version,release.point_version,release.build_version)
@@ -162,6 +156,20 @@ def platform_page(request,platform,sortfield=None):
                 platform_app['apps'].append(copy.copy(one_app))
             except IndexError:
                 pass
+
+    if sortfield:
+        sortfield = sortfield.lower()
+        if sortfield =='sortname':
+            sort = sorted(platform_app['apps'], key=itemgetter('title'))
+            platform_app['apps'] = sort
+        if sortfield =='sortnamedesc':
+            sortfield = '-'+ platform + '_project__project_overview__project__title'
+        elif sortfield == 'sortreleasedate':
+            sort = sorted(platform_app['apps'], key=itemgetter('releaseDate'), reverse=True)
+            platform_app['apps'] = sort
+    else:
+        sort = sorted(platform_app['apps'], key=itemgetter('releaseDate'), reverse=True)
+        platform_app['apps'] = sort
 
     return render(request,'applab/platform-page.html/', {
         'platform_app' : platform_app

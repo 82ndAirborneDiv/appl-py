@@ -14,7 +14,8 @@
                         <div class="col-lg-10 col-md-10 col-sm-9 col-xs-7">
                             <h1 class="titlefonts">{{appDetail.title}} <span class="icon-{{appDetail.platform}}"></span></h1>
                             <p class="version-text">Version {{ appDetail.releaseVersion }}
-                                <br><i>Updated: {{ appDetail.currentRelease.timestamp}}</i></p>
+                                <p class="version-text">{{ appDetail.app_identifier }}</p>
+                                <i>Updated: {{ appDetail.currentRelease.timestamp}}</i></p>
                             <a href="{% url 'app_download' appDetail.platform appDetail.currentRelease.id %}" role="button" class="btn btn-success dl-btn">Download</a>
                             {% if appDetail.overview.source_code_link %}
                                 <a href="{{appDetail.overview.source_code_link}}" target="_blank" role="button" class="btn btn-default gh-btn">View Source</a>
