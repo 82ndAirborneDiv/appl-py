@@ -140,6 +140,7 @@ box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.09);*/
 }
 .app-title {
     font-weight: bold;
+
 }
 .section-heading {
     margin-bottom: 30px;
@@ -478,4 +479,12 @@ p.copyright {
     color: #fff;
     background-color: #337ab7;
     border-color: #337ab7;
+}
+
+.truncate {
+    width: 100%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
