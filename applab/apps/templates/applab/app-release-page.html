@@ -13,8 +13,11 @@
                         </div>
                         <div class="col-lg-10 col-md-10 col-sm-9 col-xs-7">
                             <h1 class="titlefonts">{{appDetail.title}} <span class="icon-{{appDetail.platform}}"></span></h1>
-                            <p class="version-text">Version {{ appDetail.releaseVersion }}
-                                <p class="version-text">{{ appDetail.app_identifier }}</p>
+                            <p class="version-text">Version {{ appDetail.releaseVersion }}<br />
+
+                                <!-- app_identifier text is commented out pending further review -->
+                                <!--<p class="version-text">{{ appDetail.app_identifier }}</p>-->
+
                                 <i>Updated: {{ appDetail.currentRelease.timestamp}}</i></p>
                             <a href="{% url 'app_download' appDetail.platform appDetail.currentRelease.id %}" role="button" class="btn btn-success dl-btn">Download</a>
                             {% if appDetail.overview.source_code_link %}
@@ -160,18 +163,15 @@
             <div class="row">
                 <div class="col-lg-12">
 
-                    <h3>What’s New in Version {{ appDetail.releaseVersion }}</h3>
-                    <ul>
-                        <li>{{ appDetail.currentRelease.what_is_new }}</li>
-
-                    </ul>
+                    <h3>What’s New in Version {{ appDetail.releaseVersion}}</h3>
+                        <p>{{ appDetail.currentRelease.what_is_new|linebreaks  }}</p>
                     <hr class="hr-cust">
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12">
                     <h3>Description</h3>
-                    <p>{{ appDetail.overview.description }}</p>
+                    <p>{{ appDetail.overview.description|linebreaks }}</p>
                     <!--<p>Welcome to AppLab. This is a tool for the IIU, CDC, and its public health partners to test and collaborate on innovative mobile applications. AppLab showcases iOS and Android apps.</p>-->
 
                     <!--<p>Every app has a page which provides an overview / summary and will often include screenshots. The bottom of the overview page will display the-->
