@@ -181,7 +181,7 @@ def app_download(request, platform, release_id):
     if str.lower(platform) == "ios":
         app = IosRelease.objects.select_related('ios_project__project_overview__project').filter(id=release_id)[0]
         ipa_file_url = request.build_absolute_uri(app.ipa_file.url)
-        if user_agent.is_mobile:
+        if user_agent.os.family == "iOS":
             response = write_manifest_send(request, app, ipa_file_url)
             return response
         else:
