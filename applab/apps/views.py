@@ -42,7 +42,8 @@ def home_page(request):
             apps_to_display.append(copy.copy(one_app))
         except IndexError or AndroidRelease.DoesNotExist:
             pass
-
+    sort = sorted(apps_to_display, key=itemgetter('releaseDate'), reverse=True)
+    apps_to_display = sort
     return render(request, 'applab/home.html', {'apps': apps_to_display})
 
 def login(request):
