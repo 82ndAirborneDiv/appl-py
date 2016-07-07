@@ -1,4 +1,4 @@
-{% extends 'applab/base.html' %}
+{% extends 'apps/base.html' %}
 {% load staticfiles %}
 
 {% block content %}
@@ -20,22 +20,20 @@
             <div class="row">
                 <div class="col-lg-12 new-release-content">
                     <div class="row">
-                        {% for app in apps %}
-                            {% if app.icon and app.title and app.description %}
+                        {% for release_timestamp, release_dict in featured_releases.items %}
+                            {% with overview=release_dict.overview release=release_dict.release %}
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                                 <div class="panel panel-default">
 
                                   <div class="panel-body">
-                                    <a href="{% url 'app_release_page' app.platform app.id %}"><img src="{{ app.icon.url }}" width="512" height="512" class="img-responsive"></a>
-                                    <br><span class="app-title truncate"><a href="{% url 'app_release_page' app.platform app.id %}">{{ app.title }} </a></span>
-                                    <p class="version-text"><span class="icon-{{app.platform}}"></span>&nbsp;ver. {{ app.releaseVersion }}
-                                            <!--<br><i>Released: {{app.releaseDate | date:"SHORT_DATE_FORMAT"}}</i>-->
+                                    <a href="{% url 'app_release_page' overview.platform release.id %}"><img src="{{ overview.icon.url }}" width="512" height="512" class="img-responsive"></a>
+                                    <br><span class="app-title truncate"><a href="{% url 'app_release_page' overview.platform release.id %}">{{ overview.project.title }} </a></span>
+                                    <p class="version-text"><span class="icon-{{overview.platform}}"></span>&nbsp;ver. {{ release.version_string }}
                                     </p>
-                                    <!--<div style="height: 50px;" >{{ app.description }}</div>-->
                                   </div>
                                 </div>
                             </div>
-                            {% endif %}
+                            {%  endwith %}
                         {% endfor %}
                     </div>
                 </div>
