@@ -64,4 +64,3 @@ docs/_build/
 .python-version
 
 applab/media/
-applab/apps/migrations/
