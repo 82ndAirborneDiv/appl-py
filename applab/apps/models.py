@@ -178,6 +178,9 @@ class ReleaseQuerySet(models.QuerySet):
         return self.filter(project=project, platform=platform).order_by('-major_version', '-minor_version',
                                                                         '-point_version', '-build_version')[:count]
 
+    def latest_release(self, project, platform):
+        return self.latest_releases(project, platform, 1)[0]
+
     def featured_releases(self):
         return self.filter(is_featured=True)
 

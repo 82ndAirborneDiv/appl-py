@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from wsgiref.util import FileWrapper
 from django_user_agents.utils import get_user_agent
 from operator import itemgetter
-from .models import Project, Release, Description, Release
+from .models import Project, Release, Description, Release, Screenshot
 from .create_manifest import write_manifest_send
 
 
@@ -24,9 +24,11 @@ def app_release(request, platform, release_id):
     group_size = 4
     history_limit = 6
 
-    selected_release = Release.objects.select_related('project', 'description', 'screenshots', 'icon').get(id=release_id)
+    selected_release = Release.objects.select_related('project', 'description', 'icon').get(id=release_id)
     latest_releases = Release.objects.latest_releases(selected_release.project, selected_release.platform, history_limit)
-    screenshots = selected_release.screenshots.all()
+    screenshots = []
+    for screenshot in Screenshot.objects.filter(release=selected_release.id):
+        screenshots.append(screenshot)
 
     return render(request, 'apps/app-release-page.html', {
         'release': selected_release,
@@ -50,13 +52,13 @@ def platform_page(request, platform, sortfield=None):
 
     # iterate through each project and get latest release
     for project in Project.objects.active_projects_by_platform_string(platform):
-        latest_release = Release.objects.latest_releases(project, project.platform, 1)
+        latest_release = Release.objects.latest_release(project, project.platform)
         platform_releases.append(latest_release)
 
     if sortfield and sortfield.lower == 'sortname':
-        platform_releases.sort(key=lambda x: x.release.project.title, reverse=False)
+        platform_releases.sort(key=lambda x: x.project.title, reverse=False)
     else:
-        platform_releases.sort(key=lambda x: x.release.release_date, reverse=False)
+        platform_releases.sort(key=lambda x: x.release_date, reverse=False)
 
     return render(request, 'apps/platform-page.html', {'platform': platform, 'platform_releases': platform_releases})
 

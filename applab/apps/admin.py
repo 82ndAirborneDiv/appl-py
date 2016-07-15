@@ -4,6 +4,10 @@ from django.contrib import admin
 from .models import Project, Description, Screenshot, Release, Icon
 
 
+class ReleaseScreenshotInline(admin.TabularInline):
+    model = Release.screenshots.through
+
+
 class ProjectAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['title', 'code_name', 'is_archived']}),
@@ -13,14 +17,16 @@ class ProjectAdmin(admin.ModelAdmin):
     ]
 
 
-class ReleaseScreenshotAdmin(admin.ModelAdmin):
-    model = Screenshot
-    readonly_fields = ('screenshot_image',)
+class ReleaseAdmin(admin.ModelAdmin):
+    inlines = [
+        ReleaseScreenshotInline,
+    ]
 
+    exclude = ('screenshots',)
 
 admin.site.register(Project, ProjectAdmin)
-admin.site.register(Release)
-admin.site.register(Screenshot, ReleaseScreenshotAdmin)
+admin.site.register(Release, ReleaseAdmin)
+admin.site.register(Screenshot)
 admin.site.register(Icon)
 admin.site.register(Description)
 

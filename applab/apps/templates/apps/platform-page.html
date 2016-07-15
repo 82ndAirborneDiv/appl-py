@@ -25,13 +25,13 @@
     <div class="row">
         <div class="col-lg-12 new-release-content">
             <div class="row">
-                {% if platform_apps %}
+                {% if platform_releases %}
                     {% for release in platform_releases %}
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                             <div class="panel panel-default">
                                 <div class="panel-body">
-                                    <a href="{% url 'app_release_page' release.platform app.id %}"><img
-                                            src="{{ release.icon.url }}" width="512" height="512"
+                                    <a href="{% url 'app_release_page' release.platform release.id %}"><img
+                                            src="{{ release.icon.image.url }}" width="512" height="512"
                                             class="img-responsive"></a>
                                     <br><span class="app-title truncate"><a
                                         href="{% url 'app_release_page' release.platform release.id %}">{{ release.project.title }} </a></span>
