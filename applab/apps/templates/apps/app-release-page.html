@@ -9,33 +9,32 @@
                 <div class="col-lg-12 app-download-section">
                     <div class="row">
                         <div class="col-lg-2 col-md-2 col-sm-3 col-xs-5">
-                            <img src="{{ appDetail.overview.icon.url }}" width="512" height="512" class="img-responsive">
+                            <img src="{{ icon.url }}" width="512" height="512" class="img-responsive">
                         </div>
                         <div class="col-lg-10 col-md-10 col-sm-9 col-xs-7">
-                            <h1 class="titlefonts">{{appDetail.title}} <span class="icon-{{appDetail.platform}}"></span></h1>
-                            <p class="version-text">Version {{ appDetail.releaseVersion }}<br />
+                            <h1 class="titlefonts">{{project.title}} <span class="icon-{{release.platform_readable_name}}"></span></h1>
+                            <p class="version-text">Version {{ release.version_string }}<br />
 
-                                <!-- app_identifier text is commented out pending further review -->
-                                <!--<p class="version-text">{{ appDetail.app_identifier }}</p>-->
-
-                                <i>Updated: {{ appDetail.currentRelease.timestamp}}</i></p>
-                            <a href="{% url 'app_download' appDetail.platform appDetail.currentRelease.id %}" role="button" class="btn btn-success dl-btn">Download</a>
-                            {% if appDetail.overview.source_code_link %}
-                                <a href="{{appDetail.overview.source_code_link}}" target="_blank" role="button" class="btn btn-default gh-btn">View Source</a>
+                                 <i>Updated: {{ release.release_date}}</i></p>
+                            <a href="{% url 'app_download' release.platform release.id %}" role="button" class="btn btn-success dl-btn">Download</a>
+                            {% if project.source_code_link %}
+                                <a href="{{project.source_code_link}}" target="_blank" role="button" class="btn btn-default gh-btn">View Source</a>
                             {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
-              {% if appDetail.releaseVersion != appDetail.latestVersion %}
-                <div class="row" style="padding-top:5px;">
-                    <div class="col-lg-12 alert alert-warning" role="alert">
+                {%  with latest_releases|first as latest_release %}
+                    {% if release.version_string != latest_release.version_string %}
+                    <div class="row" style="padding-top:5px;">
+                        <div class="col-lg-12 alert alert-warning" role="alert">
 
-                            <p>This app is out of date. To view the latest version please <a href="{% url 'app_release_page' appDetail.platform appDetail.latestRelease.id %}">click here</a>.</p>
+                            <p>This app is out of date. To view the latest version please <a href="{% url 'app_release_page' release.platform latest_release.id %}">click here</a>.</p>
 
+                        </div>
                     </div>
-                </div>
-             {% endif %}
+                    {% endif %}
+                {%  endwith %}
             <div class="row">
                 <div class="col-lg-12 app-content-section">
 
@@ -44,7 +43,7 @@
 
                             <!-- Carousel items -->
                             <div class="carousel-inner center-block">
-                                {% for group in appDetail.screenshotGroups1 %}
+                                {% for group in screenshotGroups1 %}
                                 <div class="item {% if forloop.counter0 = 0 %}  active {% endif %}">
                                     <div class="row">
                                        {% for screen in group %}
@@ -68,7 +67,7 @@
                         <div id="myCarousel2" class="carousel slide">
                             <!-- Carousel items -->
                             <div class="carousel-inner center-block">
-                                {% for group in appDetail.screenshotGroups2 %}
+                                {% for group in screenshotGroups2 %}
                                 <div class="item {% if forloop.counter0 = 0 %}  active {% endif %}">
                                     <div class="row">
                                        {% for screen in group %}
@@ -93,7 +92,7 @@
 
                             <!-- Carousel items -->
                             <div class="carousel-inner center-block">
-                                {% for group in appDetail.screenshotGroups3 %}
+                                {% for group in screenshotGroups3 %}
                                 <div class="item {% if forloop.counter0 = 0 %}  active {% endif %}">
                                     <div class="row">
                                        {% for screen in group %}
@@ -118,7 +117,7 @@
 
                         <!-- Carousel items -->
                         <div class="carousel-inner center-block">
-                            {% for group in appDetail.screenshotGroups4 %}
+                            {% for group in screenshotGroups4 %}
                             <div class="item {% if forloop.counter0 = 0 %}  active {% endif %}">
                                 <div class="row">
                                    {% for screen in group %}
@@ -163,15 +162,15 @@
             <div class="row">
                 <div class="col-lg-12">
 
-                    <h3>What’s New in Version {{ appDetail.releaseVersion}}</h3>
-                        <p>{{ appDetail.currentRelease.what_is_new|linebreaks  }}</p>
+                    <h3>What’s New in Version {{ release.version_string}}</h3>
+                        <p>{{ release.what_is_new|linebreaks  }}</p>
                     <hr class="hr-cust">
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12">
                     <h3>Description</h3>
-                    <p>{{ appDetail.overview.description|linebreaks }}</p>
+                    <p>{{ description.text|linebreaks }}</p>
                     <!--<p>Welcome to AppLab. This is a tool for the IIU, CDC, and its public health partners to test and collaborate on innovative mobile applications. AppLab showcases iOS and Android apps.</p>-->
 
                     <!--<p>Every app has a page which provides an overview / summary and will often include screenshots. The bottom of the overview page will display the-->
@@ -181,7 +180,7 @@
 
                 </div>
             </div>
-                {% if appDetail.previousReleases %}
+                {% if latest_releases %}
                 <div class="row">
                 <div class="col-lg-12">
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -196,12 +195,12 @@
                         <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                           <div class="panel-body">
                             <div class="row">
-                                {% for previousRelease in appDetail.previousReleases %}
+                                {% for other_release in latest_releases %}
                                   <div class="col-lg-4 col-md-4">
 
-                                      <strong><a href="{% url 'app_release_page' appDetail.platform previousRelease.id %}">{{appDetail.title}}</a></strong><br>
-                                        <span class="version-released">Release {{previousRelease.major_version}}.{{previousRelease.minor_version}}.{{previousRelease.point_version}}.{{previousRelease.build_version}}<br>
-                                        Released: {{previousRelease.timestamp}}</span>
+                                      <strong><a href="{% url 'app_release_page' other_release.platform other_release.id %}">{{project.title}}</a></strong><br>
+                                        <span class="version-released">Release {{ other_release.version_string }}<br>
+                                        Released: {{other_release.release_date}}</span>
                                         <br><br>
 
                                   </div>

@@ -1,49 +1,26 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Project, ProjectOverview, ProjectOverviewScreenshot
-from .models import IosProject, IosRelease, AndroidProject, AndroidRelease
+from .models import Project, Description, Screenshot, Release, Icon
 
 
-admin.site.register(Project)
-
-
-class ProjectOverviewScreenshotInline(admin.TabularInline):
-    model = ProjectOverviewScreenshot
-    readonly_fields = ('screenshot_image',)
-    fields = ('screenshot_image', 'screenshot')
-
-
-class ProjectOverviewAdmin(admin.ModelAdmin):
-    readonly_fields = ('date_published', 'icon_image')
+class ProjectAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,              {'fields': ['project', 'platform', 'date_published', 'description']}),
-        ('Version Info',   {'fields': ['major_version', 'minor_version']}),
-        ('Source Code Link',   {'fields': ['source_code_link']}),
-        ('Icon',   {'fields': ['icon_image', 'icon']}),
+        (None, {'fields': ['title', 'code_name', 'is_archived']}),
+        ('Platforms Supported', {'fields': ['platform']}),
+        ('iOS Info', {'fields': ['apple_app_store_link', 'bundle_id']}),
+        ('Android Info', {'fields': ['application_id', 'google_play_link']})
     ]
-    list_filter = ['date_published', 'platform']
-    inlines = [ProjectOverviewScreenshotInline]
 
 
-class IosReleaseAdmin(admin.ModelAdmin):
-    model = IosRelease
+class ReleaseScreenshotAdmin(admin.ModelAdmin):
+    model = Screenshot
+    readonly_fields = ('screenshot_image',)
 
 
-class IosReleaseInline(admin.TabularInline):
-    model = IosRelease
-    fields = ['major_version', 'minor_version','point_version', 'build_version']
-    #show_change_link = True
-
-
-class IosProjectAdmin(admin.ModelAdmin):
-    inlines = [IosReleaseInline]
-
-
-admin.site.register(ProjectOverview, ProjectOverviewAdmin)
-admin.site.register(IosProject, IosProjectAdmin)
-admin.site.register(IosRelease, IosReleaseAdmin)
-admin.site.register(AndroidProject)
-admin.site.register(AndroidRelease)
-
+admin.site.register(Project, ProjectAdmin)
+admin.site.register(Release)
+admin.site.register(Screenshot, ReleaseScreenshotAdmin)
+admin.site.register(Icon)
+admin.site.register(Description)
 

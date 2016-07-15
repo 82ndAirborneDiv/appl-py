@@ -20,20 +20,18 @@
             <div class="row">
                 <div class="col-lg-12 new-release-content">
                     <div class="row">
-                        {% for release_timestamp, release_dict in featured_releases.items %}
-                            {% with overview=release_dict.overview release=release_dict.release %}
+                        {% for release in featured_releases %}
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                                 <div class="panel panel-default">
 
                                   <div class="panel-body">
-                                    <a href="{% url 'app_release_page' overview.platform release.id %}"><img src="{{ overview.icon.url }}" width="512" height="512" class="img-responsive"></a>
-                                    <br><span class="app-title truncate"><a href="{% url 'app_release_page' overview.platform release.id %}">{{ overview.project.title }} </a></span>
-                                    <p class="version-text"><span class="icon-{{overview.platform}}"></span>&nbsp;ver. {{ release.version_string }}
+                                    <a href="{% url 'app_release_page' release.platform release.id %}"><img src="{{ release.icon.image.url }}" width="512" height="512" class="img-responsive"></a>
+                                    <br><span class="app-title truncate"><a href="{% url 'app_release_page' release.platform release.id %}">{{ release.project.title }} </a></span>
+                                    <p class="version-text"><span class="icon-{{release.platform}}"></span>&nbsp;ver. {{ release.version_string }}
                                     </p>
                                   </div>
                                 </div>
                             </div>
-                            {%  endwith %}
                         {% endfor %}
                     </div>
                 </div>
