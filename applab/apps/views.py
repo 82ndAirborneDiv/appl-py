@@ -20,15 +20,16 @@ def login(request):
 
 @login_required()
 def app_release(request, platform, release_id):
+
     request.session['platform'] = platform.lower()
     group_size = 4
     history_limit = 6
 
     selected_release = Release.objects.select_related('project', 'description', 'icon').get(id=release_id)
-    latest_releases = Release.objects.latest_releases(selected_release.project, selected_release.platform, history_limit)
-    screenshots = []
-    for screenshot in Screenshot.objects.filter(release=selected_release.id):
-        screenshots.append(screenshot)
+    latest_releases = Release.objects.exclude(id=release_id).latest_releases(selected_release.project,
+                                                                             selected_release.platform,
+                                                                             history_limit)
+    screenshots = selected_release.screenshots.all()
 
     return render(request, 'apps/app-release-page.html', {
         'release': selected_release,
